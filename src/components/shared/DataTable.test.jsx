@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import DataTable from './DataTable'
+import DataTable, { formatCellValue } from './DataTable'
 
 const columns = [
   { key: 'name', header: 'Name' },
@@ -64,5 +64,59 @@ describe('DataTable', () => {
   it('shows empty state when no rows', () => {
     render(<DataTable columns={columns} rows={[]} onUpdate={() => {}} onDelete={() => {}} />)
     expect(screen.getByText(/no data/i)).toBeInTheDocument()
+  })
+
+  it('renders date input when editing a date column', async () => {
+    const user = userEvent.setup()
+    const dateColumns = [{ key: 'date', header: 'Date', type: 'date' }]
+    const dateRows = [{ id: '1', date: '2024-01-15' }]
+    render(<DataTable columns={dateColumns} rows={dateRows} onUpdate={() => {}} onDelete={() => {}} />)
+    await user.click(screen.getByText('Jan 15, 2024'))
+    expect(document.querySelector('input[type="date"]')).toBeInTheDocument()
+  })
+
+  it('renders textarea when editing a textarea column', async () => {
+    const user = userEvent.setup()
+    const textColumns = [{ key: 'notes', header: 'Notes', type: 'textarea' }]
+    const textRows = [{ id: '1', notes: 'some notes' }]
+    render(<DataTable columns={textColumns} rows={textRows} onUpdate={() => {}} onDelete={() => {}} />)
+    await user.click(screen.getByText('some notes'))
+    const textboxes = screen.getAllByRole('textbox')
+    expect(textboxes.some((el) => el.tagName === 'TEXTAREA')).toBe(true)
+  })
+
+  it('renders select when editing a select column', async () => {
+    const user = userEvent.setup()
+    const selectColumns = [{ key: 'status', header: 'Status', type: 'select', options: ['Active', 'Done'] }]
+    const selectRows = [{ id: '1', status: 'Active' }]
+    render(<DataTable columns={selectColumns} rows={selectRows} onUpdate={() => {}} onDelete={() => {}} />)
+    await user.click(screen.getAllByText('Active')[0])
+    expect(screen.getByRole('combobox')).toBeInTheDocument()
+  })
+
+  it('formats date values in display', () => {
+    const dateColumns = [{ key: 'date', header: 'Date', type: 'date' }]
+    const dateRows = [{ id: '1', date: '2024-01-15' }]
+    render(<DataTable columns={dateColumns} rows={dateRows} onUpdate={() => {}} onDelete={() => {}} />)
+    expect(screen.getByText('Jan 15, 2024')).toBeInTheDocument()
+  })
+})
+
+describe('formatCellValue', () => {
+  it('returns empty string for falsy value', () => {
+    expect(formatCellValue({ key: 'date', type: 'date' }, '')).toBe('')
+    expect(formatCellValue({ key: 'date', type: 'date' }, null)).toBe('')
+  })
+
+  it('formats a valid date string', () => {
+    expect(formatCellValue({ key: 'date', type: 'date' }, '2024-01-15')).toBe('Jan 15, 2024')
+  })
+
+  it('returns original value for unparseable date', () => {
+    expect(formatCellValue({ key: 'date', type: 'date' }, 'not-a-date')).toBe('not-a-date')
+  })
+
+  it('returns string value for non-date types', () => {
+    expect(formatCellValue({ key: 'name', type: 'text' }, 'hello')).toBe('hello')
   })
 })
