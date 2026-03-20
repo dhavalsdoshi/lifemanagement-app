@@ -19,17 +19,17 @@ describe('App routing', () => {
 
   it('renders Weekly Goals page', () => {
     renderWithRouter('/weekly-goals')
-    expect(screen.getByText('Set and track your weekly goals')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Weekly Goals' })).toBeInTheDocument()
   })
 
   it('renders Budget page', () => {
     renderWithRouter('/budget')
-    expect(screen.getByText('Track income and expenses')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Budget' })).toBeInTheDocument()
   })
 
   it('renders Gratitude Journal page', () => {
     renderWithRouter('/gratitude-journal')
-    expect(screen.getByText("Record things you're grateful for")).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Gratitude Journal' })).toBeInTheDocument()
   })
 
   it('renders sidebar navigation on all pages', () => {
@@ -40,11 +40,11 @@ describe('App routing', () => {
 
   it('renders Gym page', () => {
     renderWithRouter('/gym')
-    expect(screen.getByText('Track your workouts')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Gym' })).toBeInTheDocument()
   })
 
   it('renders Day Plan Guide page', () => {
     renderWithRouter('/day-plan-guide')
-    expect(screen.getByText('Steps for planning your day effectively')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Day Plan Guide' })).toBeInTheDocument()
   })
 })
