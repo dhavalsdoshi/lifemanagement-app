@@ -10,16 +10,18 @@ A clean, modern web app for comprehensive personal life management. Built to rep
 - **React Router** for navigation
 - **localStorage** for data persistence (no backend needed)
 - **Lucide React** for icons
-- **Vitest + React Testing Library** for testing
+- **Vitest + React Testing Library** for unit/component testing
+- **Playwright** for end-to-end testing
 
 ## Getting Started
 
 ```bash
-npm install      # Install dependencies
-npm run dev      # Start dev server
-npm test         # Run tests in watch mode
-npm run test:run # Run tests once
-npm run build    # Production build
+npm install               # Install dependencies
+npm run dev               # Start dev server
+npm test                  # Run unit tests in watch mode
+npm run test:run          # Run unit tests once
+npm run test:e2e          # Run Playwright E2E tests (starts dev server automatically)
+npm run build             # Production build
 ```
 
 ## Architecture
@@ -86,4 +88,26 @@ npm run build    # Production build
 
 ## Tests
 
-49 tests across 10 test files covering utilities, hooks, components, and routing.
+### Unit tests (Vitest + React Testing Library)
+
+70 tests across 11 files covering utilities, hooks, components, and routing.
+
+```bash
+npm run test:run
+```
+
+### E2E tests (Playwright)
+
+25 tests across 3 files. Playwright starts the dev server automatically.
+
+```bash
+npm run test:e2e
+```
+
+| File | What it covers |
+|------|----------------|
+| `e2e/navigation.spec.js` | Dashboard loads, sidebar links, active state, quick links |
+| `e2e/table-crud.spec.js` | Empty state, add/edit/delete rows, typed editors (date/number/textarea/select), search, localStorage persistence |
+| `e2e/import-export.spec.js` | Export download, file picker, corrupt file error, valid import |
+
+> First run requires Playwright browsers: `npx playwright install chromium`

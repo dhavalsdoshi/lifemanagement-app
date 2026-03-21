@@ -5,6 +5,16 @@
 - **Commit code** at every logical milestone
 - Keep the codebase **clean**: reduce duplication, fewest possible elements for the functionality to work
 
+## Before Every Commit
+
+Run all of the following and ensure they pass:
+
+```bash
+npm run test:run   # Unit tests (Vitest) — must all pass
+npm run test:e2e   # E2E tests (Playwright) — must all pass
+npm run build      # Production build — must succeed with no errors
+```
+
 ## Code Quality
 - No duplicate code — extract shared logic into hooks or utilities
 - All code must have tests
