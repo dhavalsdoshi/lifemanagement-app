@@ -17,8 +17,8 @@ export default function TablePage({ storageKey, title, description }) {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">{title}</h1>
-        {description && <p className="text-gray-500 mt-1">{description}</p>}
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">{title}</h1>
+        {description && <p className="text-gray-500 dark:text-gray-400 mt-1">{description}</p>}
       </div>
       <Card
         actions={

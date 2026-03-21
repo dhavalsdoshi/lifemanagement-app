@@ -5,7 +5,7 @@ import {
   Heart, Users, UserCheck, PlayCircle,
   CalendarCheck, BookHeart, DollarSign, Dumbbell, Clock, Activity, UsersRound,
   BookOpen, BookMarked, Tv, Film, Gamepad2, ChefHat, ListChecks, ShoppingCart, LifeBuoy, Briefcase,
-  Coffee, Download, Upload,
+  Coffee, Download, Upload, Sun, Moon,
 } from 'lucide-react'
 
 const NAV_SECTIONS = [
@@ -68,7 +68,7 @@ const NAV_SECTIONS = [
   },
 ]
 
-export default function Sidebar({ onImport, onExport }) {
+export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
   const fileInputRef = useRef(null)
 
   function handleFileChange(e) {
@@ -113,6 +113,14 @@ export default function Sidebar({ onImport, onExport }) {
       </nav>
 
       <div className="p-4 border-t border-white/10 space-y-2">
+        <button
+          onClick={onToggleTheme}
+          aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-md text-sm transition-colors"
+        >
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
+          {isDark ? 'Light Mode' : 'Dark Mode'}
+        </button>
         <input
           ref={fileInputRef}
           type="file"

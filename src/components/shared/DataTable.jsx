@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import CellEditor from './CellEditor'
+import StarRating from './StarRating'
 
 export function formatCellValue(col, value) {
   if (!value) return ''
@@ -75,7 +76,12 @@ export default function DataTable({ columns, rows, onUpdate, onDelete }) {
                 <tr key={row.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                   {columns.map((col) => (
                     <td key={col.key} className="py-2 px-4">
-                      {editingCell?.rowId === row.id && editingCell?.colKey === col.key ? (
+                      {col.type === 'rating' ? (
+                        <StarRating
+                          value={row[col.key]}
+                          onChange={(v) => onUpdate(row.id, col.key, v)}
+                        />
+                      ) : editingCell?.rowId === row.id && editingCell?.colKey === col.key ? (
                         <CellEditor
                           col={col}
                           value={editValue}

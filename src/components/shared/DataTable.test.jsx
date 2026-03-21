@@ -100,6 +100,23 @@ describe('DataTable', () => {
     render(<DataTable columns={dateColumns} rows={dateRows} onUpdate={() => {}} onDelete={() => {}} />)
     expect(screen.getByText('Jan 15, 2024')).toBeInTheDocument()
   })
+
+  it('renders star buttons for type rating column', () => {
+    const ratingColumns = [{ key: 'rating', header: 'Rating', type: 'rating' }]
+    const ratingRows = [{ id: '1', rating: '3' }]
+    render(<DataTable columns={ratingColumns} rows={ratingRows} onUpdate={() => {}} onDelete={() => {}} />)
+    expect(screen.getAllByRole('button', { name: /star/ })).toHaveLength(5)
+  })
+
+  it('calls onUpdate immediately when a star is clicked', async () => {
+    const user = userEvent.setup()
+    const onUpdate = vi.fn()
+    const ratingColumns = [{ key: 'rating', header: 'Rating', type: 'rating' }]
+    const ratingRows = [{ id: '1', rating: '2' }]
+    render(<DataTable columns={ratingColumns} rows={ratingRows} onUpdate={onUpdate} onDelete={() => {}} />)
+    await user.click(screen.getByLabelText('5 stars'))
+    expect(onUpdate).toHaveBeenCalledWith('1', 'rating', '5')
+  })
 })
 
 describe('formatCellValue', () => {
