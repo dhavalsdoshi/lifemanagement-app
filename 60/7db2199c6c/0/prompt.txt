@@ -1,0 +1,6 @@
+push
+
+---
+
+add to readme about playwright tests and how to run them
+add to CLAUDE.md what all should be run before any commit
