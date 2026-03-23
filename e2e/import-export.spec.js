@@ -1,5 +1,12 @@
 import { test, expect } from '@playwright/test'
 
+async function openSidebarIfMobile(page) {
+  const vp = page.viewportSize()
+  if (vp && vp.width < 768) {
+    await page.getByLabel('Open navigation').click()
+  }
+}
+
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     Object.keys(localStorage)
@@ -10,6 +17,7 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('export triggers an xlsx download', async ({ page }) => {
+  await openSidebarIfMobile(page)
   const downloadPromise = page.waitForEvent('download')
   await page.getByRole('button', { name: 'Export' }).click()
   const download = await downloadPromise

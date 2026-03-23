@@ -34,8 +34,13 @@ describe('App routing', () => {
 
   it('renders sidebar navigation on all pages', () => {
     renderWithRouter('/weekly-goals')
-    expect(screen.getByText('Life Management')).toBeInTheDocument()
+    expect(screen.getAllByText('Life Management').length).toBeGreaterThan(0)
     expect(screen.getByText('Planning & Productivity')).toBeInTheDocument()
+  })
+
+  it('renders a hamburger menu button', () => {
+    renderWithRouter('/')
+    expect(screen.getByLabelText('Open navigation')).toBeInTheDocument()
   })
 
   it('renders Gym page', () => {

@@ -43,7 +43,7 @@ export default function Dashboard() {
       <div className="mt-8 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
         <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Getting Started</h2>
         <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-          <li>Use the sidebar to navigate between sections</li>
+          <li>Use the navigation menu to move between sections</li>
           <li>Click any cell in a table to edit it inline</li>
           <li>Use Import to load your existing Excel spreadsheet</li>
           <li>Use Export to download all data as an Excel file</li>

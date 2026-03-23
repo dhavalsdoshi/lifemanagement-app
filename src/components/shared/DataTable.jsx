@@ -48,11 +48,12 @@ export default function DataTable({ columns, rows, onUpdate, onDelete }) {
           placeholder="Search..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full max-w-xs px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+          className="w-full sm:max-w-xs px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+          style={{ fontSize: '16px' }}
         />
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto overscroll-x-contain">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-700">
@@ -92,7 +93,7 @@ export default function DataTable({ columns, rows, onUpdate, onDelete }) {
                       ) : (
                         <span
                           onClick={() => startEdit(row.id, col.key, row[col.key])}
-                          className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 px-2 py-1 rounded block min-h-[28px] truncate max-w-xs"
+                          className="cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/20 active:bg-blue-100 dark:active:bg-blue-900/30 px-2 py-2.5 rounded flex items-center min-h-[44px] truncate max-w-xs touch-manipulation"
                           title={col.type === 'textarea' ? (row[col.key] || '') : undefined}
                         >
                           {formatCellValue(col, row[col.key]) || '\u00A0'}
@@ -104,7 +105,7 @@ export default function DataTable({ columns, rows, onUpdate, onDelete }) {
                     <button
                       onClick={() => onDelete(row.id)}
                       aria-label="Delete row"
-                      className="p-1 text-gray-400 hover:text-danger rounded hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="p-2.5 text-gray-400 hover:text-danger rounded hover:bg-red-50 dark:hover:bg-red-900/20 touch-manipulation"
                     >
                       <Trash2 size={16} />
                     </button>

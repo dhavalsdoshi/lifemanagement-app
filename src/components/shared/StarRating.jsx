@@ -7,7 +7,7 @@ export default function StarRating({ value, onChange, readOnly = false }) {
   const display = hovered || numValue
 
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
@@ -17,7 +17,7 @@ export default function StarRating({ value, onChange, readOnly = false }) {
           onMouseEnter={() => !readOnly && setHovered(star)}
           onMouseLeave={() => !readOnly && setHovered(0)}
           aria-label={`${star} ${star === 1 ? 'star' : 'stars'}`}
-          className={`p-0.5 transition-colors disabled:cursor-default focus:outline-none ${
+          className={`p-2 transition-colors disabled:cursor-default focus:outline-none touch-manipulation ${
             star <= display ? 'text-amber-400' : 'text-gray-300 dark:text-gray-600'
           }`}
         >

@@ -68,7 +68,7 @@ const NAV_SECTIONS = [
   },
 ]
 
-export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
+export default function Sidebar({ onImport, onExport, isDark, onToggleTheme, isOpen, onClose }) {
   const fileInputRef = useRef(null)
 
   function handleFileChange(e) {
@@ -78,7 +78,17 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
   }
 
   return (
-    <aside className="w-64 bg-gray-50 dark:bg-sidebar text-gray-800 dark:text-white flex flex-col h-screen overflow-y-auto shrink-0 border-r border-gray-200 dark:border-transparent">
+    <aside
+      className={`
+        fixed inset-y-0 left-0 z-40 w-64
+        md:relative md:translate-x-0
+        bg-gray-50 dark:bg-sidebar text-gray-800 dark:text-white
+        flex flex-col h-screen overflow-y-auto shrink-0
+        border-r border-gray-200 dark:border-transparent
+        transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}
+    >
       <div className="px-6 py-5 border-b border-gray-200 dark:border-white/10">
         <h1 className="text-xl font-bold tracking-tight">Life Management</h1>
       </div>
@@ -94,8 +104,9 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
                 <li key={item.to}>
                   <NavLink
                     to={item.to}
+                    onClick={onClose}
                     className={({ isActive }) =>
-                      `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
+                      `flex items-center gap-3 px-3 py-2.5 rounded-md text-sm transition-colors ${
                         isActive
                           ? 'bg-sidebar-active text-white'
                           : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-sidebar-hover hover:text-gray-900 dark:hover:text-white'
