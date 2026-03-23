@@ -11,7 +11,7 @@ import {
 const NAV_SECTIONS = [
   {
     label: 'Planning & Productivity',
-    color: 'text-blue-400',
+    color: 'text-blue-600 dark:text-blue-400',
     items: [
       { to: '/day-plan-guide', label: 'Day Plan Guide', icon: LayoutDashboard },
       { to: '/weekly-goals', label: 'Weekly Goals', icon: Target },
@@ -22,7 +22,7 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Life & Relationships',
-    color: 'text-pink-400',
+    color: 'text-pink-600 dark:text-pink-400',
     items: [
       { to: '/hobbies-goals', label: 'Hobbies & Goals', icon: Heart },
       { to: '/people-to-hang-out', label: 'People to Hang Out', icon: Users },
@@ -32,7 +32,7 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Trackers',
-    color: 'text-green-400',
+    color: 'text-green-700 dark:text-green-400',
     items: [
       { to: '/day-reflections', label: 'Day Reflections', icon: CalendarCheck },
       { to: '/gratitude-journal', label: 'Gratitude Journal', icon: BookHeart },
@@ -45,7 +45,7 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Lists',
-    color: 'text-yellow-400',
+    color: 'text-amber-600 dark:text-yellow-400',
     items: [
       { to: '/books-to-read', label: 'Books to Read', icon: BookOpen },
       { to: '/reading-log', label: 'Reading Log', icon: BookMarked },
@@ -61,7 +61,7 @@ const NAV_SECTIONS = [
   },
   {
     label: 'Resources',
-    color: 'text-purple-400',
+    color: 'text-purple-600 dark:text-purple-400',
     items: [
       { to: '/morning-coffee-sites', label: 'Morning Coffee Sites', icon: Coffee },
     ],
@@ -78,8 +78,8 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
   }
 
   return (
-    <aside className="w-64 bg-sidebar text-white flex flex-col h-screen overflow-y-auto shrink-0">
-      <div className="px-6 py-5 border-b border-white/10">
+    <aside className="w-64 bg-gray-50 dark:bg-sidebar text-gray-800 dark:text-white flex flex-col h-screen overflow-y-auto shrink-0 border-r border-gray-200 dark:border-transparent">
+      <div className="px-6 py-5 border-b border-gray-200 dark:border-white/10">
         <h1 className="text-xl font-bold tracking-tight">Life Management</h1>
       </div>
 
@@ -98,7 +98,7 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
                       `flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors ${
                         isActive
                           ? 'bg-sidebar-active text-white'
-                          : 'text-gray-300 hover:bg-sidebar-hover hover:text-white'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-sidebar-hover hover:text-gray-900 dark:hover:text-white'
                       }`
                     }
                   >
@@ -112,11 +112,11 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-white/10 space-y-2">
+      <div className="p-4 border-t border-gray-200 dark:border-white/10 space-y-2">
         <button
           onClick={onToggleTheme}
           aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-md text-sm transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
         >
           {isDark ? <Sun size={16} /> : <Moon size={16} />}
           {isDark ? 'Light Mode' : 'Dark Mode'}
@@ -130,14 +130,14 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme }) {
         />
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-md text-sm transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
         >
           <Upload size={16} />
           Import
         </button>
         <button
           onClick={onExport}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-md text-sm transition-colors"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
         >
           <Download size={16} />
           Export
