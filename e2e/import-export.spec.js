@@ -16,27 +16,30 @@ test.beforeEach(async ({ page }) => {
   await page.goto('/')
 })
 
-test('export triggers an xlsx download', async ({ page }) => {
+test('export Excel triggers an xlsx download', async ({ page }) => {
   await openSidebarIfMobile(page)
+  await page.getByRole('button', { name: /export/i }).click()
   const downloadPromise = page.waitForEvent('download')
-  await page.getByRole('button', { name: 'Export' }).click()
+  await page.getByRole('button', { name: /excel/i }).click()
   const download = await downloadPromise
   expect(download.suggestedFilename()).toMatch(/\.xlsx$/)
 })
 
-test('import button opens file picker', async ({ page }) => {
-  // File input exists and is connected to the Import button
-  const fileInput = page.locator('input[type="file"]')
+test('xlsx file input is present and accepts xlsx files', async ({ page }) => {
+  const fileInput = page.locator('input[accept=".xlsx,.xls"]')
   await expect(fileInput).toBeAttached()
-  await expect(fileInput).toHaveAttribute('accept', /xlsx/)
 })
 
-test('importing a corrupt file shows an error alert', async ({ page }) => {
+test('zip file input is present and accepts zip files', async ({ page }) => {
+  const fileInput = page.locator('input[accept=".zip"]')
+  await expect(fileInput).toBeAttached()
+})
+
+test('importing a corrupt xlsx file shows an error alert', async ({ page }) => {
   const dialogPromise = page.waitForEvent('dialog')
 
-  // Starts with ZIP magic bytes so XLSX attempts ZIP parsing, then fails on corrupt content
   const corruptZip = Buffer.concat([Buffer.from([0x50, 0x4b, 0x03, 0x04]), Buffer.alloc(64, 0xff)])
-  await page.locator('input[type="file"]').setInputFiles({
+  await page.locator('input[accept=".xlsx,.xls"]').setInputFiles({
     name: 'bad.xlsx',
     mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     buffer: corruptZip,
@@ -48,9 +51,6 @@ test('importing a corrupt file shows an error alert', async ({ page }) => {
 })
 
 test('importing a valid xlsx file loads data', async ({ page }) => {
-  // Generate a minimal valid xlsx buffer using raw OOXML
-  // We use a pre-seeded localStorage approach to verify the import flow works end-to-end
-  // by checking the UI before and after a reload with known data
   await page.addInitScript(() => {
     localStorage.setItem('lm-weekly-goals', JSON.stringify([
       { id: '1', goal: 'Imported goal', category: 'Test', status: 'Done' },

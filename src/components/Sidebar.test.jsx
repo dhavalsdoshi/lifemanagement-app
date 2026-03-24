@@ -32,8 +32,48 @@ describe('Sidebar', () => {
 
   it('renders import/export buttons', () => {
     renderSidebar()
-    expect(screen.getByText('Import')).toBeInTheDocument()
-    expect(screen.getByText('Export')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /import/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /export/i })).toBeInTheDocument()
+  })
+
+  it('clicking Import opens the format menu with Excel and Markdown options', async () => {
+    const user = userEvent.setup()
+    renderSidebar()
+    await user.click(screen.getByRole('button', { name: /import/i }))
+    expect(screen.getByRole('button', { name: /excel/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /markdown/i })).toBeInTheDocument()
+  })
+
+  it('clicking Export opens the format menu with Excel and Markdown options', async () => {
+    const user = userEvent.setup()
+    renderSidebar()
+    await user.click(screen.getByRole('button', { name: /export/i }))
+    expect(screen.getByRole('button', { name: /excel/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /markdown/i })).toBeInTheDocument()
+  })
+
+  it('Excel export option calls onExport', async () => {
+    const user = userEvent.setup()
+    const onExport = vi.fn()
+    renderSidebar({ onExport })
+    await user.click(screen.getByRole('button', { name: /export/i }))
+    await user.click(screen.getByRole('button', { name: /excel/i }))
+    expect(onExport).toHaveBeenCalledOnce()
+  })
+
+  it('Markdown export option calls onMarkdownExport', async () => {
+    const user = userEvent.setup()
+    const onMarkdownExport = vi.fn()
+    renderSidebar({ onMarkdownExport })
+    await user.click(screen.getByRole('button', { name: /export/i }))
+    await user.click(screen.getByRole('button', { name: /markdown/i }))
+    expect(onMarkdownExport).toHaveBeenCalledOnce()
+  })
+
+  it('has xlsx and zip file inputs in the DOM', () => {
+    renderSidebar()
+    expect(document.querySelector('input[accept=".xlsx,.xls"]')).toBeInTheDocument()
+    expect(document.querySelector('input[accept=".zip"]')).toBeInTheDocument()
   })
 
   it('calls onClose when a nav link is clicked', async () => {

@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import {
   LayoutDashboard, Target, FolderKanban, Lightbulb, Brain,
   Heart, Users, UserCheck, PlayCircle,
   CalendarCheck, BookHeart, DollarSign, Dumbbell, Clock, Activity, UsersRound,
   BookOpen, BookMarked, Tv, Film, Gamepad2, ChefHat, ListChecks, ShoppingCart, LifeBuoy, Briefcase,
-  Coffee, Download, Upload, Sun, Moon,
+  Coffee, Download, Upload, Sun, Moon, ChevronUp, Sheet, FileText,
 } from 'lucide-react'
 
 const NAV_SECTIONS = [
@@ -68,14 +68,45 @@ const NAV_SECTIONS = [
   },
 ]
 
-export default function Sidebar({ onImport, onExport, isDark, onToggleTheme, isOpen, onClose }) {
-  const fileInputRef = useRef(null)
+export default function Sidebar({
+  onImport, onExport, onMarkdownImport, onMarkdownExport,
+  isDark, onToggleTheme, isOpen, onClose,
+}) {
+  const xlsxInputRef = useRef(null)
+  const zipInputRef = useRef(null)
+  const [openMenu, setOpenMenu] = useState(null) // 'import' | 'export' | null
+  const footerRef = useRef(null)
 
-  function handleFileChange(e) {
+  // Close menu on outside click
+  useEffect(() => {
+    if (!openMenu) return
+    function handleClick(e) {
+      if (footerRef.current && !footerRef.current.contains(e.target)) {
+        setOpenMenu(null)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [openMenu])
+
+  function handleXlsxChange(e) {
     const file = e.target.files?.[0]
     if (file && onImport) onImport(file)
     e.target.value = ''
   }
+
+  function handleZipChange(e) {
+    const file = e.target.files?.[0]
+    if (file && onMarkdownImport) onMarkdownImport(file)
+    e.target.value = ''
+  }
+
+  function toggleMenu(menu) {
+    setOpenMenu((prev) => (prev === menu ? null : menu))
+  }
+
+  const menuItemClass =
+    'w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors'
 
   return (
     <aside
@@ -123,7 +154,8 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme, isO
         ))}
       </nav>
 
-      <div className="p-4 border-t border-gray-200 dark:border-white/10 space-y-2">
+      {/* Footer with theme toggle + import/export format menus */}
+      <div ref={footerRef} className="p-4 border-t border-gray-200 dark:border-white/10 space-y-2">
         <button
           onClick={onToggleTheme}
           aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
@@ -132,27 +164,72 @@ export default function Sidebar({ onImport, onExport, isDark, onToggleTheme, isO
           {isDark ? <Sun size={16} /> : <Moon size={16} />}
           {isDark ? 'Light Mode' : 'Dark Mode'}
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept=".xlsx,.xls"
-          onChange={handleFileChange}
-          className="hidden"
-        />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
-        >
-          <Upload size={16} />
-          Import
-        </button>
-        <button
-          onClick={onExport}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
-        >
-          <Download size={16} />
-          Export
-        </button>
+
+        {/* Hidden file inputs */}
+        <input ref={xlsxInputRef} type="file" accept=".xlsx,.xls" onChange={handleXlsxChange} className="hidden" />
+        <input ref={zipInputRef} type="file" accept=".zip" onChange={handleZipChange} className="hidden" />
+
+        {/* Import button + dropdown */}
+        <div className="relative">
+          {openMenu === 'import' && (
+            <div className="absolute bottom-full left-0 right-0 mb-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-10">
+              <button
+                className={menuItemClass}
+                onClick={() => { xlsxInputRef.current?.click(); setOpenMenu(null) }}
+              >
+                <Sheet size={15} className="text-green-600 shrink-0" />
+                Excel (.xlsx)
+              </button>
+              <button
+                className={menuItemClass}
+                onClick={() => { zipInputRef.current?.click(); setOpenMenu(null) }}
+              >
+                <FileText size={15} className="text-blue-500 shrink-0" />
+                Markdown (.zip)
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => toggleMenu('import')}
+            aria-expanded={openMenu === 'import'}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
+          >
+            <Upload size={16} />
+            Import
+            <ChevronUp size={14} className={`ml-auto transition-transform ${openMenu === 'import' ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
+
+        {/* Export button + dropdown */}
+        <div className="relative">
+          {openMenu === 'export' && (
+            <div className="absolute bottom-full left-0 right-0 mb-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-10">
+              <button
+                className={menuItemClass}
+                onClick={() => { onExport?.(); setOpenMenu(null) }}
+              >
+                <Sheet size={15} className="text-green-600 shrink-0" />
+                Excel (.xlsx)
+              </button>
+              <button
+                className={menuItemClass}
+                onClick={() => { onMarkdownExport?.(); setOpenMenu(null) }}
+              >
+                <FileText size={15} className="text-blue-500 shrink-0" />
+                Markdown (.zip)
+              </button>
+            </div>
+          )}
+          <button
+            onClick={() => toggleMenu('export')}
+            aria-expanded={openMenu === 'export'}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 rounded-md text-sm transition-colors"
+          >
+            <Download size={16} />
+            Export
+            <ChevronUp size={14} className={`ml-auto transition-transform ${openMenu === 'export' ? 'rotate-180' : ''}`} />
+          </button>
+        </div>
       </div>
     </aside>
   )

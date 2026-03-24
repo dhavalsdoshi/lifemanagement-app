@@ -4,7 +4,7 @@ import Sidebar from './Sidebar'
 import { useTheme } from '../hooks/useTheme'
 import { useSidebar } from '../hooks/useSidebar'
 
-export default function Layout({ onImport, onExport }) {
+export default function Layout({ onImport, onExport, onMarkdownImport, onMarkdownExport }) {
   const { isDark, toggle } = useTheme()
   const { pathname } = useLocation()
   const { isOpen, open, close, toggle: toggleSidebar } = useSidebar(pathname)
@@ -23,6 +23,8 @@ export default function Layout({ onImport, onExport }) {
       <Sidebar
         onImport={onImport}
         onExport={onExport}
+        onMarkdownImport={onMarkdownImport}
+        onMarkdownExport={onMarkdownExport}
         isDark={isDark}
         onToggleTheme={toggle}
         isOpen={isOpen}
