@@ -46,3 +46,7 @@ the ui for the mobile viewport is wierd for adding data as the inplace editing i
 ---
 
 can you visualise this for me before we implement it?
+
+---
+
+this looks great implement it
