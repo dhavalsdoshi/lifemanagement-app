@@ -66,3 +66,7 @@ in this plan can you make sure import gives an option to append data or complete
 ---
 
 update the plan for the import and export UI so that it integrates well excel and markdown both working well and easy
+
+---
+
+commit changes to the plan
