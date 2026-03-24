@@ -1,0 +1,225 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Life Management" [level=1] [ref=e6]
+    - navigation [ref=e7]:
+      - generic [ref=e8]:
+        - heading "Planning & Productivity" [level=3] [ref=e9]
+        - list [ref=e10]:
+          - listitem [ref=e11]:
+            - link "Day Plan Guide" [ref=e12]:
+              - /url: /day-plan-guide
+              - img [ref=e13]
+              - text: Day Plan Guide
+          - listitem [ref=e18]:
+            - link "Weekly Goals" [ref=e19]:
+              - /url: /weekly-goals
+              - img [ref=e20]
+              - text: Weekly Goals
+          - listitem [ref=e24]:
+            - link "Current Projects" [ref=e25]:
+              - /url: /current-projects
+              - img [ref=e26]
+              - text: Current Projects
+          - listitem [ref=e28]:
+            - link "Bad EF Day Notepad" [ref=e29]:
+              - /url: /bad-ef-day-notepad
+              - img [ref=e30]
+              - text: Bad EF Day Notepad
+          - listitem [ref=e32]:
+            - link "Coping Mechanisms" [ref=e33]:
+              - /url: /coping-mechanisms
+              - img [ref=e34]
+              - text: Coping Mechanisms
+      - generic [ref=e42]:
+        - heading "Life & Relationships" [level=3] [ref=e43]
+        - list [ref=e44]:
+          - listitem [ref=e45]:
+            - link "Hobbies & Goals" [ref=e46]:
+              - /url: /hobbies-goals
+              - img [ref=e47]
+              - text: Hobbies & Goals
+          - listitem [ref=e49]:
+            - link "People to Hang Out" [ref=e50]:
+              - /url: /people-to-hang-out
+              - img [ref=e51]
+              - text: People to Hang Out
+          - listitem [ref=e56]:
+            - link "Check In With" [ref=e57]:
+              - /url: /check-in-with
+              - img [ref=e58]
+              - text: Check In With
+          - listitem [ref=e62]:
+            - link "Current" [ref=e63]:
+              - /url: /current
+              - img [ref=e64]
+              - text: Current
+      - generic [ref=e67]:
+        - heading "Trackers" [level=3] [ref=e68]
+        - list [ref=e69]:
+          - listitem [ref=e70]:
+            - link "Day Reflections" [ref=e71]:
+              - /url: /day-reflections
+              - img [ref=e72]
+              - text: Day Reflections
+          - listitem [ref=e75]:
+            - link "Gratitude Journal" [ref=e76]:
+              - /url: /gratitude-journal
+              - img [ref=e77]
+              - text: Gratitude Journal
+          - listitem [ref=e80]:
+            - link "Budget" [ref=e81]:
+              - /url: /budget
+              - img [ref=e82]
+              - text: Budget
+          - listitem [ref=e84]:
+            - link "Gym" [ref=e85]:
+              - /url: /gym
+              - img [ref=e86]
+              - text: Gym
+          - listitem [ref=e92]:
+            - link "Was I Late" [ref=e93]:
+              - /url: /was-i-late
+              - img [ref=e94]
+              - text: Was I Late
+          - listitem [ref=e97]:
+            - link "Symptom Tracker" [ref=e98]:
+              - /url: /symptom-tracker
+              - img [ref=e99]
+              - text: Symptom Tracker
+          - listitem [ref=e101]:
+            - link "Meetup Groups" [ref=e102]:
+              - /url: /meetup-groups
+              - img [ref=e103]
+              - text: Meetup Groups
+      - generic [ref=e107]:
+        - heading "Lists" [level=3] [ref=e108]
+        - list [ref=e109]:
+          - listitem [ref=e110]:
+            - link "Books to Read" [ref=e111]:
+              - /url: /books-to-read
+              - img [ref=e112]
+              - text: Books to Read
+          - listitem [ref=e114]:
+            - link "Reading Log" [ref=e115]:
+              - /url: /reading-log
+              - img [ref=e116]
+              - text: Reading Log
+          - listitem [ref=e119]:
+            - link "Shows to Watch" [ref=e120]:
+              - /url: /shows-to-watch
+              - img [ref=e121]
+              - text: Shows to Watch
+          - listitem [ref=e124]:
+            - link "Movies Watched" [ref=e125]:
+              - /url: /movies-watched
+              - img [ref=e126]
+              - text: Movies Watched
+          - listitem [ref=e128]:
+            - link "Games to Play" [ref=e129]:
+              - /url: /games-to-play
+              - img [ref=e130]
+              - text: Games to Play
+          - listitem [ref=e132]:
+            - link "Cooking & Baking" [ref=e133]:
+              - /url: /cooking-baking
+              - img [ref=e134]
+              - text: Cooking & Baking
+          - listitem [ref=e136]:
+            - link "Habits" [ref=e137]:
+              - /url: /habits
+              - img [ref=e138]
+              - text: Habits
+          - listitem [ref=e141]:
+            - link "Shopping List" [ref=e142]:
+              - /url: /shopping-list
+              - img [ref=e143]
+              - text: Shopping List
+          - listitem [ref=e147]:
+            - link "Self-Help Resources" [ref=e148]:
+              - /url: /self-help-resources
+              - img [ref=e149]
+              - text: Self-Help Resources
+          - listitem [ref=e156]:
+            - link "Jobs Applied" [ref=e157]:
+              - /url: /jobs-applied
+              - img [ref=e158]
+              - text: Jobs Applied
+      - generic [ref=e161]:
+        - heading "Resources" [level=3] [ref=e162]
+        - list [ref=e163]:
+          - listitem [ref=e164]:
+            - link "Morning Coffee Sites" [ref=e165]:
+              - /url: /morning-coffee-sites
+              - img [ref=e166]
+              - text: Morning Coffee Sites
+    - generic [ref=e168]:
+      - button "Switch to dark mode" [ref=e169]:
+        - img [ref=e170]
+        - text: Dark Mode
+      - button "Import" [ref=e172]:
+        - img [ref=e173]
+        - text: Import
+      - button "Export" [ref=e176]:
+        - img [ref=e177]
+        - text: Export
+  - generic [ref=e180]:
+    - banner [ref=e181]:
+      - button "Open navigation" [ref=e182]:
+        - img [ref=e183]
+      - generic [ref=e184]: Life Management
+    - main [ref=e185]:
+      - generic [ref=e186]:
+        - heading "Weekly Goals" [level=1] [ref=e188]
+        - generic [ref=e192]:
+          - textbox "Search..." [ref=e194]
+          - generic [ref=e195]:
+            - generic [ref=e196]:
+              - generic [ref=e197]:
+                - generic [ref=e198]: Read a book
+                - generic [ref=e199]:
+                  - button "Edit row" [ref=e200]:
+                    - img [ref=e201]
+                  - button "Delete row" [ref=e204]:
+                    - img [ref=e205]
+              - generic [ref=e208]:
+                - generic [ref=e209]: Learning
+                - generic [ref=e210]: In Progress
+            - generic [ref=e211]:
+              - generic [ref=e212]:
+                - generic [ref=e213]: Exercise daily
+                - generic [ref=e214]:
+                  - button "Edit row" [ref=e215]:
+                    - img [ref=e216]
+                  - button "Delete row" [ref=e219]:
+                    - img [ref=e220]
+              - generic [ref=e223]:
+                - generic [ref=e224]: Health
+                - generic [ref=e225]: Not Started
+          - button "Add row" [ref=e226]:
+            - img [ref=e227]
+          - generic [ref=e229]:
+            - generic [ref=e231]:
+              - generic [ref=e232]: Edit row
+              - button "Close" [ref=e233]:
+                - img [ref=e234]
+            - generic [ref=e238]:
+              - generic [ref=e239]:
+                - generic [ref=e240]: Goal
+                - textbox [ref=e241]: Read a book
+              - generic [ref=e242]:
+                - generic [ref=e243]: Category
+                - textbox [ref=e244]: Learning
+              - generic [ref=e245]:
+                - generic [ref=e246]: Status
+                - combobox [ref=e247]:
+                  - option "—"
+                  - option "Not Started"
+                  - option "In Progress" [selected]
+                  - option "Done"
+            - generic [ref=e249]:
+              - button "Cancel" [ref=e250]
+              - button "Save changes" [ref=e251]
+```

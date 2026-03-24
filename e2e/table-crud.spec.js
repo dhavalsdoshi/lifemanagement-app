@@ -1,5 +1,9 @@
 import { test, expect } from '@playwright/test'
 
+// These tests cover the desktop table UI (inline editing).
+// Mobile card+sheet UI is tested in mobile-crud.spec.js.
+test.use({ viewport: { width: 1280, height: 800 } })
+
 // Seed data for weekly-goals (Goal=text, Category=text, Status=select)
 const SEED_ROWS = [
   { id: '1', goal: 'Read a book', category: 'Learning', status: 'In Progress' },

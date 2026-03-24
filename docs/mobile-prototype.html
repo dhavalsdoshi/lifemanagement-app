@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mobile UI Prototype — Life Management</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #cbd5e1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      gap: 48px;
+    }
+
+    h1 {
+      color: #1e293b;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    /* ── Two phones side by side ── */
+    .frames {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .frame-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .frame-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── Phone shell ── */
+    .phone {
+      width: 375px;
+      height: 812px;
+      border-radius: 44px;
+      border: 10px solid #0f172a;
+      background: #f8fafc;
+      overflow: hidden;
+      position: relative;
+      box-shadow:
+        0 0 0 2px #334155,
+        0 30px 80px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Notch */
+    .phone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 28px;
+      background: #0f172a;
+      border-radius: 0 0 18px 18px;
+      z-index: 100;
+    }
+
+    /* ── Status bar ── */
+    .status-bar {
+      height: 44px;
+      background: #f8fafc;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 24px 6px;
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .status-bar .time { font-weight: 700; }
+    .status-icons { display: flex; gap: 5px; align-items: center; }
+    .status-icons span { width: 16px; height: 10px; background: #1e293b; border-radius: 2px; display: inline-block; }
+    .status-icons span:first-child { width: 12px; opacity: 0.5; }
+    .status-icons span:nth-child(2) { width: 14px; opacity: 0.75; }
+
+    /* ── Top navigation bar ── */
+    .top-bar {
+      height: 52px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      flex-shrink: 0;
+    }
+
+    .hamburger {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: #475569;
+      border-radius: 2px;
+    }
+
+    .app-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1e293b;
+      letter-spacing: -0.2px;
+    }
+
+    /* ── Scrollable content ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scrollbar-width: none;
+    }
+    .content::-webkit-scrollbar { display: none; }
+
+    /* ── Section header row ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .row-count {
+      font-size: 12px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+
+    /* ── Search bar ── */
+    .search-bar {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+
+    .search-icon {
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 14px;
+      color: #64748b;
+      background: transparent;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.3;
+      flex: 1;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: none;
+      background: #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .btn-icon.danger { color: #ef4444; }
+    .btn-icon:active { background: #e2e8f0; }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-gray { background: #f1f5f9; color: #475569; }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #dcfce7; color: #166534; }
+    .badge-amber { background: #fef9c3; color: #854d0e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-purple { background: #f3e8ff; color: #6b21a8; }
+
+    .card-note {
+      font-size: 13px;
+      color: #64748b;
+      background: #f8fafc;
+      border-radius: 8px;
+      padding: 8px 10px;
+      line-height: 1.45;
+    }
+
+    /* Stars */
+    .stars { display: flex; gap: 2px; }
+    .star { color: #fbbf24; font-size: 13px; }
+    .star.empty { color: #e2e8f0; }
+
+    /* ── FAB ── */
+    .fab {
+      position: absolute;
+      bottom: 28px;
+      right: 20px;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.5);
+      z-index: 10;
+    }
+
+    /* ── Bottom sheet ── */
+    .backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 20;
+    }
+
+    .sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 24px 24px 0 0;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      max-height: 80%;
+    }
+
+    .sheet-handle {
+      width: 36px;
+      height: 4px;
+      background: #e2e8f0;
+      border-radius: 2px;
+      margin: 12px auto 0;
+      flex-shrink: 0;
+    }
+
+    .sheet-header {
+      padding: 12px 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .sheet-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .btn-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .sheet-body {
+      padding: 16px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .field-input {
+      width: 100%;
+      height: 44px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0 12px;
+      font-family: inherit;
+      font-size: 15px;
+      color: #1e293b;
+      background: #fff;
+      outline: none;
+      appearance: none;
+    }
+
+    .field-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .field-input.active {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .field-textarea {
+      width: 100%;
+      height: 88px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 15px;
+      color: #1e293b;
+      background: #fff;
+      outline: none;
+      resize: none;
+      line-height: 1.5;
+    }
+
+    .field-textarea:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .star-picker {
+      display: flex;
+      gap: 8px;
+    }
+
+    .star-btn {
+      font-size: 26px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .star-btn.lit { color: #fbbf24; }
+    .star-btn.dim { color: #e2e8f0; }
+
+    .sheet-footer {
+      padding: 12px 20px 28px;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #f1f5f9;
+      flex-shrink: 0;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      height: 48px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      background: #fff;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .btn-save {
+      flex: 2;
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      background: #3b82f6;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(59,130,246,0.35);
+    }
+
+    /* ── Legend / annotations ── */
+    .annotations {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .annotation {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+      color: #475569;
+    }
+
+    .ann-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+  </style>
+</head>
+<body>
+
+  <div style="text-align:center">
+    <h1>Mobile UI Prototype</h1>
+    <p class="subtitle">Life Management — card list + bottom sheet edit flow</p>
+  </div>
+
+  <div class="frames">
+
+    <!-- ── SCREEN 1: Card list view ── -->
+    <div class="frame-wrap">
+      <div class="frame-label">① List view</div>
+      <div class="phone">
+
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="top-bar">
+          <button class="hamburger">
+            <span></span><span></span><span></span>
+          </button>
+          <span class="app-title">Life Management</span>
+        </div>
+
+        <div class="content">
+
+          <div class="section-header">
+            <span class="section-title">Weekly Goals</span>
+            <span class="row-count">4 items</span>
+          </div>
+
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input type="text" placeholder="Search…" readonly />
+          </div>
+
+          <!-- Card 1 -->
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Launch MVP to beta users</span>
+              <div class="card-actions">
+                <button class="btn-icon">✎</button>
+                <button class="btn-icon danger">⊗</button>
+              </div>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-blue">Work</span>
+              <span class="badge badge-amber">In Progress</span>
+              <span class="badge badge-purple">High</span>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Read 2 chapters of Atomic Habits</span>
+              <div class="card-actions">
+                <button class="btn-icon">✎</button>
+                <button class="btn-icon danger">⊗</button>
+              </div>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-gray">Personal</span>
+              <span class="badge badge-green">Done</span>
+              <span class="badge badge-gray">Medium</span>
+            </div>
+            <div class="card-note">Finished chapters 3 and 4 — really good section on habit stacking.</div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">30 min walk every morning</span>
+              <div class="card-actions">
+                <button class="btn-icon">✎</button>
+                <button class="btn-icon danger">⊗</button>
+              </div>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-gray">Health</span>
+              <span class="badge badge-amber">In Progress</span>
+              <span class="badge badge-gray">Low</span>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Set up budget spreadsheet</span>
+              <div class="card-actions">
+                <button class="btn-icon">✎</button>
+                <button class="btn-icon danger">⊗</button>
+              </div>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-gray">Finance</span>
+              <span class="badge badge-gray">Not Started</span>
+              <span class="badge badge-red">High</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- FAB -->
+        <button class="fab">+</button>
+
+      </div>
+
+      <div class="annotations">
+        <div class="annotation"><span class="ann-num">1</span>Cards replace the horizontal-scrolling table</div>
+        <div class="annotation"><span class="ann-num">2</span>Primary field is the card title</div>
+        <div class="annotation"><span class="ann-num">3</span>Badges show key metadata at a glance</div>
+        <div class="annotation"><span class="ann-num">4</span>Notes surface inline if present</div>
+        <div class="annotation"><span class="ann-num">5</span>FAB opens a blank add form</div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 2: Bottom sheet edit form ── -->
+    <div class="frame-wrap">
+      <div class="frame-label">② Edit / add form (bottom sheet)</div>
+      <div class="phone" style="background:#f8fafc">
+
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="top-bar">
+          <button class="hamburger">
+            <span></span><span></span><span></span>
+          </button>
+          <span class="app-title">Life Management</span>
+        </div>
+
+        <!-- Blurred background cards -->
+        <div class="content" style="filter: blur(1.5px); pointer-events:none; opacity:0.4">
+          <div class="section-header">
+            <span class="section-title">Weekly Goals</span>
+            <span class="row-count">4 items</span>
+          </div>
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input type="text" placeholder="Search…" readonly />
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Launch MVP to beta users</span>
+            </div>
+            <div class="card-meta">
+              <span class="badge badge-blue">Work</span>
+              <span class="badge badge-amber">In Progress</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Read 2 chapters of Atomic Habits</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backdrop -->
+        <div class="backdrop"></div>
+
+        <!-- Bottom sheet -->
+        <div class="sheet">
+          <div class="sheet-handle"></div>
+
+          <div class="sheet-header">
+            <span class="sheet-title">Edit row</span>
+            <button class="btn-close">✕</button>
+          </div>
+
+          <div class="sheet-body">
+
+            <div class="field-group">
+              <label class="field-label">Goal</label>
+              <input class="field-input active" type="text" value="Launch MVP to beta users" readonly />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Category</label>
+              <select class="field-input">
+                <option>Work</option>
+                <option>Personal</option>
+                <option>Health</option>
+                <option>Finance</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Status</label>
+              <select class="field-input">
+                <option>Not Started</option>
+                <option selected>In Progress</option>
+                <option>Done</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Priority</label>
+              <select class="field-input">
+                <option>Low</option>
+                <option>Medium</option>
+                <option selected>High</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Rating</label>
+              <div class="star-picker">
+                <button class="star-btn lit">★</button>
+                <button class="star-btn lit">★</button>
+                <button class="star-btn lit">★</button>
+                <button class="star-btn dim">★</button>
+                <button class="star-btn dim">★</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Notes</label>
+              <textarea class="field-textarea" readonly>Beta invite emails sent to 50 users. Waiting on feedback.</textarea>
+            </div>
+
+          </div>
+
+          <div class="sheet-footer">
+            <button class="btn-cancel">Cancel</button>
+            <button class="btn-save">Save changes</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotations">
+        <div class="annotation"><span class="ann-num">1</span>Sheet slides up ~75% — list still visible behind</div>
+        <div class="annotation"><span class="ann-num">2</span>Each field gets full width and a clear label</div>
+        <div class="annotation"><span class="ann-num">3</span>Star rating is a large tap-friendly picker</div>
+        <div class="annotation"><span class="ann-num">4</span>Textarea has room to read and write</div>
+        <div class="annotation"><span class="ann-num">5</span>Save / Cancel pinned at the bottom</div>
+      </div>
+    </div>
+
+    <!-- ── SCREEN 3: Empty add form ── -->
+    <div class="frame-wrap">
+      <div class="frame-label">③ Add new row (blank form)</div>
+      <div class="phone" style="background:#f8fafc">
+
+        <div class="status-bar">
+          <span class="time">9:41</span>
+          <div class="status-icons">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+
+        <div class="top-bar">
+          <button class="hamburger">
+            <span></span><span></span><span></span>
+          </button>
+          <span class="app-title">Life Management</span>
+        </div>
+
+        <div class="content" style="filter: blur(1.5px); pointer-events:none; opacity:0.4">
+          <div class="section-header">
+            <span class="section-title">Weekly Goals</span>
+            <span class="row-count">4 items</span>
+          </div>
+          <div class="search-bar">
+            <span class="search-icon">⌕</span>
+            <input type="text" placeholder="Search…" readonly />
+          </div>
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">Launch MVP to beta users</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="backdrop"></div>
+
+        <div class="sheet">
+          <div class="sheet-handle"></div>
+
+          <div class="sheet-header">
+            <span class="sheet-title">Add row</span>
+            <button class="btn-close">✕</button>
+          </div>
+
+          <div class="sheet-body">
+
+            <div class="field-group">
+              <label class="field-label">Goal</label>
+              <input class="field-input active" type="text" placeholder="Enter goal…" readonly />
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Category</label>
+              <select class="field-input">
+                <option value="" disabled selected>Select…</option>
+                <option>Work</option>
+                <option>Personal</option>
+                <option>Health</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Status</label>
+              <select class="field-input">
+                <option value="" disabled selected>Select…</option>
+                <option>Not Started</option>
+                <option>In Progress</option>
+                <option>Done</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Priority</label>
+              <select class="field-input">
+                <option value="" disabled selected>Select…</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Rating</label>
+              <div class="star-picker">
+                <button class="star-btn dim">★</button>
+                <button class="star-btn dim">★</button>
+                <button class="star-btn dim">★</button>
+                <button class="star-btn dim">★</button>
+                <button class="star-btn dim">★</button>
+              </div>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">Notes</label>
+              <textarea class="field-textarea" placeholder="Optional notes…" readonly></textarea>
+            </div>
+
+          </div>
+
+          <div class="sheet-footer">
+            <button class="btn-cancel">Cancel</button>
+            <button class="btn-save">Add row</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="annotations">
+        <div class="annotation"><span class="ann-num">1</span>Same sheet, blank state — triggered by FAB</div>
+        <div class="annotation"><span class="ann-num">2</span>First field auto-focused when sheet opens</div>
+        <div class="annotation"><span class="ann-num">3</span>"Add row" label on save button instead of "Save changes"</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="font-size:13px;color:#94a3b8;text-align:center;padding-bottom:40px">
+    Desktop (≥ 768px) is unchanged — table + inline editing stays as-is.
+  </p>
+
+</body>
+</html>

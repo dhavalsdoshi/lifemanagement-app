@@ -24,7 +24,7 @@ export default function TablePage({ storageKey, title, description }) {
         actions={
           <button
             onClick={handleAdd}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-md text-sm hover:bg-primary-hover transition-colors"
+            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-md text-sm hover:bg-primary-hover transition-colors"
           >
             <Plus size={16} />
             Add Row
@@ -36,6 +36,7 @@ export default function TablePage({ storageKey, title, description }) {
           rows={rows}
           onUpdate={updateRow}
           onDelete={deleteRow}
+          onAdd={addRow}
         />
       </Card>
     </div>
