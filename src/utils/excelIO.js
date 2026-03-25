@@ -1,4 +1,4 @@
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 
 // Maps storage keys to Excel sheet names and column definitions.
 // Each column: { key, header, type?, options? }
@@ -250,65 +250,85 @@ for (const [key, config] of Object.entries(SHEET_CONFIG)) {
   sheetNameToKey[config.sheetName] = key
 }
 
+function cellToString(value) {
+  if (value === null || value === undefined) return ''
+  if (value instanceof Date) return value.toISOString().slice(0, 10)
+  if (typeof value === 'object' && value.text) return String(value.text)
+  return String(value)
+}
+
 export function importFromWorkbook(workbook) {
   const result = {}
 
-  workbook.SheetNames.forEach((sheetName) => {
-    const storageKey = sheetNameToKey[sheetName]
+  workbook.eachSheet((sheet) => {
+    const storageKey = sheetNameToKey[sheet.name]
     if (!storageKey) return
 
     const config = SHEET_CONFIG[storageKey]
-    const sheet = workbook.Sheets[sheetName]
-    const rawRows = XLSX.utils.sheet_to_json(sheet, { defval: '' })
-
-    // Map Excel column headers to internal keys
     const headerToKey = {}
-    config.columns.forEach((col) => {
-      headerToKey[col.header] = col.key
+    config.columns.forEach((col) => { headerToKey[col.header] = col.key })
+
+    let headers = null
+    let rowIndex = 0
+    const rows = []
+
+    sheet.eachRow((row) => {
+      rowIndex++
+      const values = row.values.slice(1) // exceljs row.values is 1-indexed
+      if (rowIndex === 1) {
+        headers = values.map(cellToString)
+        return
+      }
+      const item = { id: String(rowIndex - 1) }
+      headers.forEach((header, idx) => {
+        const key = headerToKey[header]
+        if (key) item[key] = cellToString(values[idx])
+      })
+      rows.push(item)
     })
 
-    result[storageKey] = rawRows.map((row, i) => {
-      const item = { id: String(i + 1) }
-      Object.entries(row).forEach(([header, value]) => {
-        const key = headerToKey[header]
-        if (key) item[key] = String(value)
-      })
-      return item
-    })
+    result[storageKey] = rows
   })
 
   return result
 }
 
 export function exportToWorkbook(allData) {
-  const wb = XLSX.utils.book_new()
+  const wb = new ExcelJS.Workbook()
 
   Object.entries(SHEET_CONFIG).forEach(([storageKey, config]) => {
+    const ws = wb.addWorksheet(config.sheetName)
+    ws.addRow(config.columns.map((c) => c.header))
     const data = allData[storageKey] || []
-    const headers = config.columns.map((c) => c.header)
-
-    const rows = data.map((item) =>
-      config.columns.map((col) => item[col.key] ?? '')
-    )
-
-    const ws = XLSX.utils.aoa_to_sheet([headers, ...rows])
-    XLSX.utils.book_append_sheet(wb, ws, config.sheetName)
+    data.forEach((item) => {
+      ws.addRow(config.columns.map((col) => item[col.key] ?? ''))
+    })
   })
 
   return wb
 }
 
-export function downloadWorkbook(allData, filename = 'Life Management.xlsx') {
+export async function downloadWorkbook(allData, filename = 'Life Management.xlsx') {
   const wb = exportToWorkbook(allData)
-  XLSX.writeFile(wb, filename)
+  const buffer = await wb.xlsx.writeBuffer()
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 export function parseFile(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       try {
-        const wb = XLSX.read(e.target.result, { type: 'array' })
+        const wb = new ExcelJS.Workbook()
+        await wb.xlsx.load(e.target.result)
         resolve(importFromWorkbook(wb))
       } catch (err) {
         reject(err)

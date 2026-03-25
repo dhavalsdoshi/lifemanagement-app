@@ -24,7 +24,7 @@ function App() {
   function handleExport() {
     const allData = {}
     Object.keys(SHEET_CONFIG).forEach((key) => { allData[key] = loadData(key) })
-    downloadWorkbook(allData)
+    downloadWorkbook(allData) // async — fire and forget
   }
 
   async function handleMarkdownImport(file) {

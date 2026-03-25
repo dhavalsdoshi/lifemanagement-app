@@ -12,6 +12,8 @@ Run all of the following and ensure they pass:
 ```bash
 npm run test:run   # Unit tests (Vitest) — must all pass
 npm run test:e2e   # E2E tests (Playwright) — must all pass
+npm run lint       # ESLint
+npm audit          # check vulnerabilities
 npm run build      # Production build — must succeed with no errors
 ```
 

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import * as XLSX from 'xlsx'
+import ExcelJS from 'exceljs'
 import { importFromWorkbook, exportToWorkbook, SHEET_CONFIG } from './excelIO'
 
 beforeEach(() => {
@@ -24,13 +24,11 @@ describe('SHEET_CONFIG', () => {
 
 describe('importFromWorkbook', () => {
   it('parses sheet data into storage format', () => {
-    const wb = XLSX.utils.book_new()
-    const ws = XLSX.utils.aoa_to_sheet([
-      ['Goal', 'Category', 'Status'],
-      ['Exercise daily', 'Health', 'In Progress'],
-      ['Read 1 book', 'Learning', 'Done'],
-    ])
-    XLSX.utils.book_append_sheet(wb, ws, 'Weekly Goals')
+    const wb = new ExcelJS.Workbook()
+    const ws = wb.addWorksheet('Weekly Goals')
+    ws.addRow(['Goal', 'Category', 'Status'])
+    ws.addRow(['Exercise daily', 'Health', 'In Progress'])
+    ws.addRow(['Read 1 book', 'Learning', 'Done'])
 
     const result = importFromWorkbook(wb)
     expect(result['weekly-goals']).toHaveLength(2)
@@ -42,18 +40,19 @@ describe('importFromWorkbook', () => {
   })
 
   it('skips sheets not in config', () => {
-    const wb = XLSX.utils.book_new()
-    const ws = XLSX.utils.aoa_to_sheet([['Random'], ['data']])
-    XLSX.utils.book_append_sheet(wb, ws, 'Unknown Sheet')
+    const wb = new ExcelJS.Workbook()
+    const ws = wb.addWorksheet('Unknown Sheet')
+    ws.addRow(['Random'])
+    ws.addRow(['data'])
 
     const result = importFromWorkbook(wb)
     expect(Object.keys(result)).toHaveLength(0)
   })
 
-  it('handles empty sheets', () => {
-    const wb = XLSX.utils.book_new()
-    const ws = XLSX.utils.aoa_to_sheet([['Goal', 'Category', 'Status']])
-    XLSX.utils.book_append_sheet(wb, ws, 'Weekly Goals')
+  it('handles empty sheets (header only)', () => {
+    const wb = new ExcelJS.Workbook()
+    const ws = wb.addWorksheet('Weekly Goals')
+    ws.addRow(['Goal', 'Category', 'Status'])
 
     const result = importFromWorkbook(wb)
     expect(result['weekly-goals']).toEqual([])
@@ -69,20 +68,33 @@ describe('exportToWorkbook', () => {
     }
 
     const wb = exportToWorkbook(allData)
-    expect(wb.SheetNames).toContain('Weekly Goals')
+    const ws = wb.getWorksheet('Weekly Goals')
+    expect(ws).toBeDefined()
 
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets['Weekly Goals'])
-    expect(rows).toHaveLength(1)
-    expect(rows[0]['Goal']).toBe('Exercise')
+    const dataRows = []
+    ws.eachRow((row, rowNumber) => {
+      if (rowNumber > 1) dataRows.push(row.values.slice(1).map(String))
+    })
+    expect(dataRows).toHaveLength(1)
+    expect(dataRows[0][0]).toBe('Exercise') // Goal is first column
+    expect(dataRows[0][1]).toBe('Health')
+    expect(dataRows[0][2]).toBe('Done')
   })
 
-  it('creates empty sheets for sections with no data', () => {
+  it('creates a sheet for every section in SHEET_CONFIG', () => {
     const wb = exportToWorkbook({})
-    expect(wb.SheetNames.length).toBeGreaterThan(0)
-    // Each sheet should at least have headers
-    wb.SheetNames.forEach((name) => {
-      const rows = XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1 })
-      expect(rows.length).toBeGreaterThanOrEqual(1)
+    const sheetNames = wb.worksheets.map((ws) => ws.name)
+    Object.values(SHEET_CONFIG).forEach((config) => {
+      expect(sheetNames).toContain(config.sheetName)
+    })
+  })
+
+  it('each sheet has a header row', () => {
+    const wb = exportToWorkbook({})
+    wb.eachSheet((ws) => {
+      let rowCount = 0
+      ws.eachRow(() => { rowCount++ })
+      expect(rowCount).toBeGreaterThanOrEqual(1) // at least the header
     })
   })
 })
