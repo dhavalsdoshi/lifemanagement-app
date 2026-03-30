@@ -7,7 +7,7 @@ import { useSidebar } from '../hooks/useSidebar'
 export default function Layout({ onImport, onExport, onMarkdownImport, onMarkdownExport }) {
   const { isDark, toggle } = useTheme()
   const { pathname } = useLocation()
-  const { isOpen, open, close, toggle: toggleSidebar } = useSidebar(pathname)
+  const { isOpen, close, toggle: toggleSidebar } = useSidebar(pathname)
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">

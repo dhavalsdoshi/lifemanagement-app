@@ -3,7 +3,9 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
-  base: process.env.GITHUB_ACTIONS ? '/lifemanagement-app/' : '/',
+  base: process.env.TAURI_ENV_TARGET_TRIPLE
+    ? './'
+    : process.env.GITHUB_ACTIONS ? '/lifemanagement-app/' : '/',
   plugins: [react(), tailwindcss()],
   test: {
     environment: 'happy-dom',

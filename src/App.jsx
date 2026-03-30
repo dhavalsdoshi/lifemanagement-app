@@ -6,7 +6,7 @@ import TablePage from './pages/TablePage'
 import ImportModeModal from './components/shared/ImportModeModal'
 import { loadData, saveData } from './utils/storage'
 import { parseFile, downloadWorkbook, SHEET_CONFIG } from './utils/excelIO'
-import { exportToMarkdownZip, importFromMarkdownZip } from './utils/markdownIO'
+import { downloadMarkdownZip, importFromMarkdownZip } from './utils/markdownIO'
 
 function App() {
   const [pendingMdImport, setPendingMdImport] = useState(null) // { data, sectionCount }
@@ -57,14 +57,7 @@ function App() {
   function handleMarkdownExport() {
     const allData = {}
     Object.keys(SHEET_CONFIG).forEach((key) => { allData[key] = loadData(key) })
-    exportToMarkdownZip(allData).then((blob) => {
-      const url = URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = 'life-management.zip'
-      a.click()
-      URL.revokeObjectURL(url)
-    })
+    downloadMarkdownZip(allData)
   }
 
   return (

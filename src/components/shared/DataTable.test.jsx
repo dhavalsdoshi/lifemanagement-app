@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import DataTable, { formatCellValue } from './DataTable'
+import DataTable from './DataTable'
+import { formatCellValue } from '../../utils/format'
 
 const columns = [
   { key: 'name', header: 'Name' },

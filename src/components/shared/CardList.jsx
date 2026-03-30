@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from 'lucide-react'
 import StarRating from './StarRating'
-import { formatCellValue } from './DataTable'
+import { formatCellValue } from '../../utils/format'
 
 const STATUS_COLORS = {
   'done':        'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300',

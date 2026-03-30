@@ -5,27 +5,16 @@ import StarRating from './StarRating'
 import CardList from './CardList'
 import BottomSheet from './BottomSheet'
 import RowForm from './RowForm'
-
-export function formatCellValue(col, value) {
-  if (!value) return ''
-  if (col.type === 'date') {
-    try {
-      const d = new Date(value + 'T00:00:00')
-      if (isNaN(d)) return value
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    } catch {
-      return value
-    }
-  }
-  return String(value)
-}
+import { formatCellValue } from '../../utils/format'
 
 function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false
+    return window.matchMedia('(max-width: 767px)').matches
+  })
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia) return
     const mq = window.matchMedia('(max-width: 767px)')
-    setIsMobile(mq.matches)
     const handler = (e) => setIsMobile(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)

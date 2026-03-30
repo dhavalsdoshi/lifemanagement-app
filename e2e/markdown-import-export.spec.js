@@ -59,7 +59,6 @@ test('Markdown import — overwrite replaces existing data', async ({ page }) =>
   ].join('\n') + '\n')
   const blob = await zip.generateAsync({ type: 'nodebuffer' })
 
-  const dialogPromise = page.waitForEvent('dialog')
   await page.locator('input[accept=".zip"]').setInputFiles({
     name: 'import.zip',
     mimeType: 'application/zip',

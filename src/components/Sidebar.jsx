@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
+import { IS_TAURI } from '../utils/storage'
 import {
   LayoutDashboard, Target, FolderKanban, Lightbulb, Brain,
   Heart, Users, UserCheck, PlayCircle,
@@ -105,6 +106,32 @@ export default function Sidebar({
     setOpenMenu((prev) => (prev === menu ? null : menu))
   }
 
+  async function handleImportFormat(format) {
+    setOpenMenu(null)
+    if (IS_TAURI) {
+      try {
+        const { open } = await import('@tauri-apps/plugin-dialog')
+        const { readFile } = await import('@tauri-apps/plugin-fs')
+        const selected = await open({
+          multiple: false,
+          filters: format === 'xlsx'
+            ? [{ name: 'Excel', extensions: ['xlsx', 'xls'] }]
+            : [{ name: 'ZIP', extensions: ['zip'] }],
+        })
+        if (!selected) return
+        const bytes = await readFile(selected)
+        const file = new File([bytes], selected.split('/').pop())
+        if (format === 'xlsx') onImport?.(file)
+        else onMarkdownImport?.(file)
+      } catch (err) {
+        console.error('Import failed:', err)
+      }
+    } else {
+      if (format === 'xlsx') xlsxInputRef.current?.click()
+      else zipInputRef.current?.click()
+    }
+  }
+
   const menuItemClass =
     'w-full flex items-center gap-2.5 px-3 py-2.5 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors'
 
@@ -175,14 +202,14 @@ export default function Sidebar({
             <div className="absolute bottom-full left-0 right-0 mb-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg overflow-hidden z-10">
               <button
                 className={menuItemClass}
-                onClick={() => { xlsxInputRef.current?.click(); setOpenMenu(null) }}
+                onClick={() => handleImportFormat('xlsx')}
               >
                 <Sheet size={15} className="text-green-600 shrink-0" />
                 Excel (.xlsx)
               </button>
               <button
                 className={menuItemClass}
-                onClick={() => { zipInputRef.current?.click(); setOpenMenu(null) }}
+                onClick={() => handleImportFormat('zip')}
               >
                 <FileText size={15} className="text-blue-500 shrink-0" />
                 Markdown (.zip)

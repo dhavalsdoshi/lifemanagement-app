@@ -1,5 +1,6 @@
 import JSZip from 'jszip'
 import { SHEET_CONFIG } from './excelIO'
+import { IS_TAURI } from './storage'
 
 let _counter = 0
 function genId() {
@@ -134,6 +135,33 @@ export async function exportToMarkdownZip(allData) {
     zip.file(`${storageKey}.md`, sectionToMarkdown(storageKey, allData[storageKey] || []))
   })
   return zip.generateAsync({ type: 'blob' })
+}
+
+// ── ZIP download (wraps exportToMarkdownZip with save dialog) ─────────────────
+
+export async function downloadMarkdownZip(allData, filename = 'life-management.zip') {
+  const blob = await exportToMarkdownZip(allData)
+
+  if (IS_TAURI) {
+    const { save } = await import('@tauri-apps/plugin-dialog')
+    const { writeFile } = await import('@tauri-apps/plugin-fs')
+    const path = await save({
+      defaultPath: filename,
+      filters: [{ name: 'ZIP', extensions: ['zip'] }],
+    })
+    if (path) {
+      const buffer = await blob.arrayBuffer()
+      await writeFile(path, new Uint8Array(buffer))
+    }
+    return
+  }
+
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
 }
 
 // ── ZIP import ────────────────────────────────────────────────────────────────

@@ -1,4 +1,5 @@
 import ExcelJS from 'exceljs'
+import { IS_TAURI } from './storage'
 
 // Maps storage keys to Excel sheet names and column definitions.
 // Each column: { key, header, type?, options? }
@@ -311,6 +312,18 @@ export function exportToWorkbook(allData) {
 export async function downloadWorkbook(allData, filename = 'Life Management.xlsx') {
   const wb = exportToWorkbook(allData)
   const buffer = await wb.xlsx.writeBuffer()
+
+  if (IS_TAURI) {
+    const { save } = await import('@tauri-apps/plugin-dialog')
+    const { writeFile } = await import('@tauri-apps/plugin-fs')
+    const path = await save({
+      defaultPath: filename,
+      filters: [{ name: 'Excel', extensions: ['xlsx'] }],
+    })
+    if (path) await writeFile(path, new Uint8Array(buffer))
+    return
+  }
+
   const blob = new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   })
