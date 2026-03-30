@@ -1,0 +1,60 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "4f4524211959",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 3,
+  "files_touched": [
+    "e2e/markdown-import-export.spec.js",
+    "package-lock.json",
+    "package.json",
+    "src-tauri/.gitignore",
+    "src-tauri/Cargo.toml",
+    "src-tauri/build.rs",
+    "src-tauri/capabilities/default.json",
+    "src-tauri/icons/128x128.png",
+    "src-tauri/icons/128x128@2x.png",
+    "src-tauri/icons/32x32.png",
+    "src-tauri/icons/Square107x107Logo.png",
+    "src-tauri/icons/Square142x142Logo.png",
+    "src-tauri/icons/Square150x150Logo.png",
+    "src-tauri/icons/Square284x284Logo.png",
+    "src-tauri/icons/Square30x30Logo.png",
+    "src-tauri/icons/Square310x310Logo.png",
+    "src-tauri/icons/Square44x44Logo.png",
+    "src-tauri/icons/Square71x71Logo.png",
+    "src-tauri/icons/Square89x89Logo.png",
+    "src-tauri/icons/StoreLogo.png",
+    "src-tauri/icons/icon.icns",
+    "src-tauri/icons/icon.ico",
+    "src-tauri/icons/icon.png",
+    "src-tauri/src/lib.rs",
+    "src-tauri/src/main.rs",
+    "src-tauri/tauri.conf.json",
+    "src/App.jsx",
+    "src/components/Layout.jsx",
+    "src/components/Sidebar.jsx",
+    "src/components/shared/CardList.jsx",
+    "src/components/shared/DataTable.jsx",
+    "src/components/shared/DataTable.test.jsx",
+    "src/hooks/useSidebar.js",
+    "src/utils/excelIO.js",
+    "src/utils/markdownIO.js",
+    "vite.config.js"
+  ],
+  "sessions": [
+    {
+      "metadata": "/4f/4524211959/0/metadata.json",
+      "transcript": "/4f/4524211959/0/full.jsonl",
+      "content_hash": "/4f/4524211959/0/content_hash.txt",
+      "prompt": "/4f/4524211959/0/prompt.txt"
+    }
+  ],
+  "token_usage": {
+    "input_tokens": 380,
+    "cache_creation_tokens": 2209443,
+    "cache_read_tokens": 27596756,
+    "output_tokens": 194254,
+    "api_call_count": 319
+  }
+}
