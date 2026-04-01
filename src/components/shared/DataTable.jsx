@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Trash2, Plus } from 'lucide-react'
 import CellEditor from './CellEditor'
 import StarRating from './StarRating'
@@ -6,21 +6,7 @@ import CardList from './CardList'
 import BottomSheet from './BottomSheet'
 import RowForm from './RowForm'
 import { formatCellValue } from '../../utils/format'
-
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return false
-    return window.matchMedia('(max-width: 767px)').matches
-  })
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return
-    const mq = window.matchMedia('(max-width: 767px)')
-    const handler = (e) => setIsMobile(e.matches)
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [])
-  return isMobile
-}
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 export default function DataTable({ columns, rows, onUpdate, onDelete, onAdd }) {
   const [search, setSearch] = useState('')

@@ -1,10 +1,6 @@
 import { useState, useCallback } from 'react'
 import { loadData, saveData } from '../utils/storage'
-
-let counter = 0
-function genId() {
-  return `${Date.now()}-${++counter}`
-}
+import { genId } from '../utils/id'
 
 export function useLocalData(storageKey) {
   const [rows, setRowsState] = useState(() => loadData(storageKey))

@@ -1,21 +1,9 @@
 import { Link } from 'react-router-dom'
-import {
-  Target, FolderKanban, BookHeart, DollarSign, CalendarCheck,
-  BookOpen, Tv, ChefHat, ListChecks, Activity,
-} from 'lucide-react'
+import { SECTIONS } from '../config/sections'
 
-const QUICK_LINKS = [
-  { to: '/weekly-goals', label: 'Weekly Goals', icon: Target, color: 'bg-blue-500' },
-  { to: '/current-projects', label: 'Projects', icon: FolderKanban, color: 'bg-indigo-500' },
-  { to: '/gratitude-journal', label: 'Gratitude', icon: BookHeart, color: 'bg-pink-500' },
-  { to: '/budget', label: 'Budget', icon: DollarSign, color: 'bg-green-500' },
-  { to: '/day-reflections', label: 'Reflections', icon: CalendarCheck, color: 'bg-amber-500' },
-  { to: '/books-to-read', label: 'Books', icon: BookOpen, color: 'bg-purple-500' },
-  { to: '/shows-to-watch', label: 'Shows', icon: Tv, color: 'bg-red-500' },
-  { to: '/cooking-baking', label: 'Recipes', icon: ChefHat, color: 'bg-orange-500' },
-  { to: '/habits', label: 'Habits', icon: ListChecks, color: 'bg-teal-500' },
-  { to: '/symptom-tracker', label: 'Symptoms', icon: Activity, color: 'bg-rose-500' },
-]
+const QUICK_LINKS = Object.entries(SECTIONS)
+  .filter(([, s]) => s.dashLabel)
+  .map(([key, s]) => ({ to: `/${key}`, label: s.dashLabel, icon: s.icon, color: s.dashColor }))
 
 export default function Dashboard() {
   return (

@@ -1,73 +1,18 @@
 import { NavLink } from 'react-router-dom'
 import { useRef, useState, useEffect } from 'react'
-import { IS_TAURI } from '../utils/storage'
+import { SECTIONS, CATEGORIES } from '../config/sections'
+import { openFile } from '../utils/platform'
 import {
-  LayoutDashboard, Target, FolderKanban, Lightbulb, Brain,
-  Heart, Users, UserCheck, PlayCircle,
-  CalendarCheck, BookHeart, DollarSign, Dumbbell, Clock, Activity, UsersRound,
-  BookOpen, BookMarked, Tv, Film, Gamepad2, ChefHat, ListChecks, ShoppingCart, LifeBuoy, Briefcase,
-  Coffee, Download, Upload, Sun, Moon, ChevronUp, Sheet, FileText,
+  Download, Upload, Sun, Moon, ChevronUp, Sheet, FileText,
 } from 'lucide-react'
 
-const NAV_SECTIONS = [
-  {
-    label: 'Planning & Productivity',
-    color: 'text-blue-600 dark:text-blue-400',
-    items: [
-      { to: '/day-plan-guide', label: 'Day Plan Guide', icon: LayoutDashboard },
-      { to: '/weekly-goals', label: 'Weekly Goals', icon: Target },
-      { to: '/current-projects', label: 'Current Projects', icon: FolderKanban },
-      { to: '/bad-ef-day-notepad', label: 'Bad EF Day Notepad', icon: Lightbulb },
-      { to: '/coping-mechanisms', label: 'Coping Mechanisms', icon: Brain },
-    ],
-  },
-  {
-    label: 'Life & Relationships',
-    color: 'text-pink-600 dark:text-pink-400',
-    items: [
-      { to: '/hobbies-goals', label: 'Hobbies & Goals', icon: Heart },
-      { to: '/people-to-hang-out', label: 'People to Hang Out', icon: Users },
-      { to: '/check-in-with', label: 'Check In With', icon: UserCheck },
-      { to: '/current', label: 'Current', icon: PlayCircle },
-    ],
-  },
-  {
-    label: 'Trackers',
-    color: 'text-green-700 dark:text-green-400',
-    items: [
-      { to: '/day-reflections', label: 'Day Reflections', icon: CalendarCheck },
-      { to: '/gratitude-journal', label: 'Gratitude Journal', icon: BookHeart },
-      { to: '/budget', label: 'Budget', icon: DollarSign },
-      { to: '/gym', label: 'Gym', icon: Dumbbell },
-      { to: '/was-i-late', label: 'Was I Late', icon: Clock },
-      { to: '/symptom-tracker', label: 'Symptom Tracker', icon: Activity },
-      { to: '/meetup-groups', label: 'Meetup Groups', icon: UsersRound },
-    ],
-  },
-  {
-    label: 'Lists',
-    color: 'text-amber-600 dark:text-yellow-400',
-    items: [
-      { to: '/books-to-read', label: 'Books to Read', icon: BookOpen },
-      { to: '/reading-log', label: 'Reading Log', icon: BookMarked },
-      { to: '/shows-to-watch', label: 'Shows to Watch', icon: Tv },
-      { to: '/movies-watched', label: 'Movies Watched', icon: Film },
-      { to: '/games-to-play', label: 'Games to Play', icon: Gamepad2 },
-      { to: '/cooking-baking', label: 'Cooking & Baking', icon: ChefHat },
-      { to: '/habits', label: 'Habits', icon: ListChecks },
-      { to: '/shopping-list', label: 'Shopping List', icon: ShoppingCart },
-      { to: '/self-help-resources', label: 'Self-Help Resources', icon: LifeBuoy },
-      { to: '/jobs-applied', label: 'Jobs Applied', icon: Briefcase },
-    ],
-  },
-  {
-    label: 'Resources',
-    color: 'text-purple-600 dark:text-purple-400',
-    items: [
-      { to: '/morning-coffee-sites', label: 'Morning Coffee Sites', icon: Coffee },
-    ],
-  },
-]
+const NAV_SECTIONS = CATEGORIES.map(({ label, color }) => ({
+  label,
+  color,
+  items: Object.entries(SECTIONS)
+    .filter(([, s]) => s.category === label)
+    .map(([key, s]) => ({ to: `/${key}`, label: s.navLabel, icon: s.icon })),
+}))
 
 export default function Sidebar({
   onImport, onExport, onMarkdownImport, onMarkdownExport,
@@ -108,28 +53,20 @@ export default function Sidebar({
 
   async function handleImportFormat(format) {
     setOpenMenu(null)
-    if (IS_TAURI) {
-      try {
-        const { open } = await import('@tauri-apps/plugin-dialog')
-        const { readFile } = await import('@tauri-apps/plugin-fs')
-        const selected = await open({
-          multiple: false,
-          filters: format === 'xlsx'
-            ? [{ name: 'Excel', extensions: ['xlsx', 'xls'] }]
-            : [{ name: 'ZIP', extensions: ['zip'] }],
-        })
-        if (!selected) return
-        const bytes = await readFile(selected)
-        const file = new File([bytes], selected.split('/').pop())
-        if (format === 'xlsx') onImport?.(file)
-        else onMarkdownImport?.(file)
-      } catch (err) {
-        console.error('Import failed:', err)
-      }
-    } else {
-      if (format === 'xlsx') xlsxInputRef.current?.click()
-      else zipInputRef.current?.click()
+    const filters = format === 'xlsx'
+      ? [{ name: 'Excel', extensions: ['xlsx', 'xls'] }]
+      : [{ name: 'ZIP', extensions: ['zip'] }]
+
+    const file = await openFile({ filters })
+    if (file) {
+      if (format === 'xlsx') onImport?.(file)
+      else onMarkdownImport?.(file)
+      return
     }
+
+    // Browser fallback: trigger hidden file input
+    if (format === 'xlsx') xlsxInputRef.current?.click()
+    else zipInputRef.current?.click()
   }
 
   const menuItemClass =
@@ -192,7 +129,7 @@ export default function Sidebar({
           {isDark ? 'Light Mode' : 'Dark Mode'}
         </button>
 
-        {/* Hidden file inputs */}
+        {/* Hidden file inputs (browser fallback) */}
         <input ref={xlsxInputRef} type="file" accept=".xlsx,.xls" onChange={handleXlsxChange} className="hidden" />
         <input ref={zipInputRef} type="file" accept=".zip" onChange={handleZipChange} className="hidden" />
 

@@ -1,34 +1,8 @@
+import { SECTIONS } from '../config/sections'
+
 const PREFIX = 'lm-'
 
-export const ALL_KEYS = [
-  'weekly-goals',
-  'current-projects',
-  'hobbies-goals',
-  'budget',
-  'gratitude-journal',
-  'habits',
-  'books-to-read',
-  'reading-log',
-  'shows-to-watch',
-  'movies-watched',
-  'games-to-play',
-  'cooking-baking',
-  'day-reflections',
-  'people-to-hang-out',
-  'jobs-applied',
-  'symptom-tracker',
-  'coping-mechanisms',
-  'self-help-resources',
-  'shopping-list',
-  'meetup-groups',
-  'was-i-late',
-  'current',
-  'check-in-with',
-  'morning-coffee-sites',
-  'day-plan-guide',
-  'bad-ef-day-notepad',
-  'gym',
-]
+export const ALL_KEYS = Object.keys(SECTIONS)
 
 // Detect Tauri runtime (not present in browser or test environments)
 export const IS_TAURI = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window
