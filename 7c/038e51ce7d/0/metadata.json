@@ -1,0 +1,42 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "7c038e51ce7d",
+  "session_id": "4262485f-4413-4e56-9258-73c8ab38ae2e",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-01T05:39:43.984014Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "src/components/Sidebar.jsx",
+    "src/components/shared/CellEditor.jsx",
+    "src/components/shared/DataTable.jsx",
+    "src/components/shared/DataTable.test.jsx",
+    "src/components/shared/RowForm.jsx",
+    "src/pages/Dashboard.jsx",
+    "src/utils/excelIO.js",
+    "src/utils/markdownIO.js",
+    "src/utils/storage.js"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-4-6",
+  "turn_id": "33692944eb30",
+  "token_usage": {
+    "input_tokens": 420,
+    "cache_creation_tokens": 2440330,
+    "cache_read_tokens": 29947655,
+    "output_tokens": 247515,
+    "api_call_count": 354
+  },
+  "session_metrics": {
+    "turn_count": 32
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-01T05:39:43.226637Z",
+    "agent_lines": 0,
+    "human_added": 248,
+    "human_modified": 566,
+    "human_removed": 0,
+    "total_committed": 248,
+    "agent_percentage": 0
+  }
+}
