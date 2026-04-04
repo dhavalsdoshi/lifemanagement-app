@@ -1,6 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, beforeEach, vi } from 'vitest'
 import ExcelJS from 'exceljs'
-import { importFromWorkbook, exportToWorkbook, SHEET_CONFIG } from './excelIO'
+import { importFromWorkbook, exportToWorkbook, downloadWorkbook, SHEET_CONFIG } from './excelIO'
+
+vi.mock('./platform', () => ({ saveFile: vi.fn().mockResolvedValue(undefined) }))
 
 beforeEach(() => {
   localStorage.clear()
@@ -96,5 +98,59 @@ describe('exportToWorkbook', () => {
       ws.eachRow(() => { rowCount++ })
       expect(rowCount).toBeGreaterThanOrEqual(1) // at least the header
     })
+  })
+})
+
+describe('downloadWorkbook', () => {
+  it('calls saveFile with an ArrayBuffer and the xlsx filename', async () => {
+    const { saveFile } = await import('./platform')
+    vi.clearAllMocks()
+
+    await downloadWorkbook({})
+
+    expect(saveFile).toHaveBeenCalledOnce()
+    const [buffer, opts] = saveFile.mock.calls[0]
+    // ExcelJS returns Buffer (extends Uint8Array) in Node; ArrayBuffer in the browser
+    expect(buffer.byteLength ?? buffer.length).toBeGreaterThan(0)
+    expect(opts.filename).toMatch(/\.xlsx$/)
+    expect(opts.mimeType).toMatch(/spreadsheetml/)
+    expect(opts.filters).toEqual(expect.arrayContaining([
+      expect.objectContaining({ extensions: expect.arrayContaining(['xlsx']) }),
+    ]))
+  })
+
+  it('accepts a custom filename', async () => {
+    const { saveFile } = await import('./platform')
+    vi.clearAllMocks()
+
+    await downloadWorkbook({}, 'my-export.xlsx')
+
+    const [, opts] = saveFile.mock.calls[0]
+    expect(opts.filename).toBe('my-export.xlsx')
+  })
+})
+
+describe('importFromWorkbook edge cases', () => {
+  it('ignores sheets not present in SHEET_CONFIG', () => {
+    const wb = new ExcelJS.Workbook()
+    const ws = wb.addWorksheet('Completely Unknown Sheet')
+    ws.addRow(['Col A', 'Col B'])
+    ws.addRow(['val1', 'val2'])
+    const result = importFromWorkbook(wb)
+    expect(Object.keys(result)).toHaveLength(0)
+  })
+
+  it('handles a workbook with both known and unknown sheets', () => {
+    const wb = new ExcelJS.Workbook()
+    const known = wb.addWorksheet('Weekly Goals')
+    known.addRow(['Goal', 'Category', 'Status'])
+    known.addRow(['My goal', 'Work', 'Done'])
+    const unknown = wb.addWorksheet('Secret Sheet')
+    unknown.addRow(['X'])
+    unknown.addRow(['y'])
+
+    const result = importFromWorkbook(wb)
+    expect(Object.keys(result)).toEqual(['weekly-goals'])
+    expect(result['weekly-goals']).toHaveLength(1)
   })
 })

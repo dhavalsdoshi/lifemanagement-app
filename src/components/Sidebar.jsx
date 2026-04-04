@@ -74,6 +74,8 @@ export default function Sidebar({
 
   return (
     <aside
+      data-testid="sidebar"
+      data-sidebar-open={String(isOpen)}
       className={`
         fixed inset-y-0 left-0 z-40 w-64
         md:relative md:translate-x-0

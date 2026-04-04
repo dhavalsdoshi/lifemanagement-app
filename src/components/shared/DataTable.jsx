@@ -68,6 +68,7 @@ export default function DataTable({ columns, rows, onUpdate, onDelete, onAdd }) 
         Cancel
       </button>
       <button
+        data-testid="sheet-submit"
         onClick={handleSheetSave}
         className="flex-[2] h-12 bg-primary rounded-xl text-sm font-semibold text-white shadow-sm"
       >
@@ -147,7 +148,7 @@ export default function DataTable({ columns, rows, onUpdate, onDelete, onAdd }) 
                 filtered.map((row) => (
                   <tr key={row.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50">
                     {columns.map((col) => (
-                      <td key={col.key} className="py-2 px-4">
+                      <td key={col.key} data-col={col.key} className="py-2 px-4">
                         {col.type === 'rating' ? (
                           <StarRating
                             value={row[col.key]}

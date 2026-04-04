@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import App from './App'
+import { SECTIONS } from './config/sections'
 
 function renderWithRouter(route = '/') {
   return render(
@@ -17,21 +18,6 @@ describe('App routing', () => {
     expect(screen.getByText('Welcome Back')).toBeInTheDocument()
   })
 
-  it('renders Weekly Goals page', () => {
-    renderWithRouter('/weekly-goals')
-    expect(screen.getByRole('heading', { name: 'Weekly Goals' })).toBeInTheDocument()
-  })
-
-  it('renders Budget page', () => {
-    renderWithRouter('/budget')
-    expect(screen.getByRole('heading', { name: 'Budget' })).toBeInTheDocument()
-  })
-
-  it('renders Gratitude Journal page', () => {
-    renderWithRouter('/gratitude-journal')
-    expect(screen.getByRole('heading', { name: 'Gratitude Journal' })).toBeInTheDocument()
-  })
-
   it('renders sidebar navigation on all pages', () => {
     renderWithRouter('/weekly-goals')
     expect(screen.getAllByText('Life Management').length).toBeGreaterThan(0)
@@ -42,14 +28,13 @@ describe('App routing', () => {
     renderWithRouter('/')
     expect(screen.getByLabelText('Open navigation')).toBeInTheDocument()
   })
+})
 
-  it('renders Gym page', () => {
-    renderWithRouter('/gym')
-    expect(screen.getByRole('heading', { name: 'Gym' })).toBeInTheDocument()
-  })
-
-  it('renders Day Plan Guide page', () => {
-    renderWithRouter('/day-plan-guide')
-    expect(screen.getByRole('heading', { name: 'Day Plan Guide' })).toBeInTheDocument()
+describe('All 27 section routes render without crashing', () => {
+  Object.entries(SECTIONS).forEach(([key, section]) => {
+    it(`renders ${section.sheetName} page at /${key}`, () => {
+      renderWithRouter(`/${key}`)
+      expect(screen.getByRole('heading', { name: section.sheetName })).toBeInTheDocument()
+    })
   })
 })

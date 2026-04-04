@@ -14,6 +14,7 @@ export default function Layout({ onImport, onExport, onMarkdownImport, onMarkdow
       {/* Backdrop — mobile only */}
       {isOpen && (
         <div
+          data-testid="sidebar-backdrop"
           className="fixed inset-0 z-30 bg-black/40 md:hidden"
           onClick={close}
           aria-hidden="true"

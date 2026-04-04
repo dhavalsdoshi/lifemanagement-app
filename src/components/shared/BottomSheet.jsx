@@ -11,11 +11,11 @@ export default function BottomSheet({ isOpen, onClose, title, children, footer }
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 rounded-t-3xl flex flex-col max-h-[85dvh] shadow-2xl">
+      <div data-testid="sheet-panel" className="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-gray-900 rounded-t-3xl flex flex-col max-h-[85dvh] shadow-2xl">
         <div className="w-9 h-1 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mt-3 shrink-0" />
 
         <div className="flex items-center justify-between px-5 py-3 shrink-0">
-          <span className="text-base font-bold text-gray-900 dark:text-gray-100">{title}</span>
+          <span data-testid="sheet-title" className="text-base font-bold text-gray-900 dark:text-gray-100">{title}</span>
           <button
             onClick={onClose}
             aria-label="Close"

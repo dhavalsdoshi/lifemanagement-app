@@ -57,4 +57,43 @@ describe('FieldInput', () => {
     expect(onChange).toHaveBeenCalledWith('B')
     expect(onCommit).toHaveBeenCalledWith('B')
   })
+
+  it('renders <input type="number"> for type=number', () => {
+    render(<FieldInput col={{ key: 'amount', type: 'number' }} value="5" onChange={() => {}} />)
+    expect(document.querySelector('input[type="number"]')).toBeInTheDocument()
+  })
+
+  it('calls onChange for number input', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<FieldInput col={{ key: 'amount', type: 'number' }} value="" onChange={onChange} />)
+    await user.type(document.querySelector('input[type="number"]'), '7')
+    expect(onChange).toHaveBeenCalledWith('7')
+  })
+
+  it('renders <input type="date"> for type=date', () => {
+    render(<FieldInput col={{ key: 'date', type: 'date' }} value="2024-01-01" onChange={() => {}} />)
+    expect(document.querySelector('input[type="date"]')).toBeInTheDocument()
+  })
+
+  it('calls onChange for date input', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<FieldInput col={{ key: 'date', type: 'date' }} value="" onChange={onChange} />)
+    await user.type(document.querySelector('input[type="date"]'), '2024-06-15')
+    expect(onChange).toHaveBeenCalled()
+  })
+
+  it('renders <input type="url"> for type=url', () => {
+    render(<FieldInput col={{ key: 'url', type: 'url' }} value="https://example.com" onChange={() => {}} />)
+    expect(document.querySelector('input[type="url"]')).toBeInTheDocument()
+  })
+
+  it('calls onChange for url input', async () => {
+    const user = userEvent.setup()
+    const onChange = vi.fn()
+    render(<FieldInput col={{ key: 'url', type: 'url' }} value="" onChange={onChange} />)
+    await user.type(document.querySelector('input[type="url"]'), 'https://test.com')
+    expect(onChange).toHaveBeenCalled()
+  })
 })

@@ -324,3 +324,89 @@ describe('Roundtrip fidelity', () => {
     expect(dr[0].highlights).toBe('Good day\nLine 2')
   })
 })
+
+describe('markdownToRows — edge cases', () => {
+  it('extra columns beyond config are ignored', () => {
+    // weekly-goals has Goal, Category, Status — add an extra column
+    const md = [
+      '| Goal | Category | Status | ExtraCol |',
+      '| --- | --- | --- | --- |',
+      '| My goal | Work | Done | ignored |',
+    ].join('\n') + '\n'
+
+    const rows = markdownToRows('weekly-goals', md)
+    expect(rows).toHaveLength(1)
+    expect(rows[0].goal).toBe('My goal')
+    expect(rows[0].status).toBe('Done')
+    expect(rows[0].ExtraCol).toBeUndefined()
+  })
+
+  it('missing columns are absent from the row object (not populated)', () => {
+    // Only provide Goal column — Category and Status headers are absent
+    const md = [
+      '| Goal |',
+      '| --- |',
+      '| Sparse goal |',
+    ].join('\n') + '\n'
+
+    const rows = markdownToRows('weekly-goals', md)
+    expect(rows).toHaveLength(1)
+    expect(rows[0].goal).toBe('Sparse goal')
+    // columns not present in the markdown are simply not set on the row
+    expect(rows[0].category).toBeUndefined()
+    expect(rows[0].status).toBeUndefined()
+  })
+
+  it('completely empty table body produces no rows', () => {
+    const md = [
+      '| Goal | Category | Status |',
+      '| --- | --- | --- |',
+    ].join('\n') + '\n'
+
+    const rows = markdownToRows('weekly-goals', md)
+    expect(rows).toHaveLength(0)
+  })
+
+  it('each imported row gets a unique id', () => {
+    const md = [
+      '| Goal | Category | Status |',
+      '| --- | --- | --- |',
+      '| A | x | Done |',
+      '| B | y | Done |',
+      '| C | z | Done |',
+    ].join('\n') + '\n'
+
+    const rows = markdownToRows('weekly-goals', md)
+    const ids = rows.map((r) => r.id)
+    expect(new Set(ids).size).toBe(3)
+  })
+})
+
+describe('importFromMarkdownZip — edge cases', () => {
+  it('ignores ZIP entries that do not match a known section key', async () => {
+    const JSZip = (await import('jszip')).default
+    const zip = new JSZip()
+    zip.file('not-a-section.md', '| Col |\n| --- |\n| val |\n')
+    const blob = await zip.generateAsync({ type: 'blob' })
+    const file = new File([blob], 'test.zip', { type: 'application/zip' })
+
+    const result = await importFromMarkdownZip(file)
+    expect(Object.keys(result)).toHaveLength(0)
+  })
+
+  it('imports only the sections present in the ZIP', async () => {
+    const JSZip = (await import('jszip')).default
+    const zip = new JSZip()
+    zip.file('weekly-goals.md', [
+      '| Goal | Category | Status |',
+      '| --- | --- | --- |',
+      '| ZIP goal | Test | In Progress |',
+    ].join('\n') + '\n')
+    const blob = await zip.generateAsync({ type: 'blob' })
+    const file = new File([blob], 'test.zip', { type: 'application/zip' })
+
+    const result = await importFromMarkdownZip(file)
+    expect(Object.keys(result)).toEqual(['weekly-goals'])
+    expect(result['weekly-goals'][0].goal).toBe('ZIP goal')
+  })
+})
