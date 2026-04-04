@@ -1,0 +1,52 @@
+{
+  "cli_version": "0.5.0",
+  "checkpoint_id": "643c48601c75",
+  "session_id": "4262485f-4413-4e56-9258-73c8ab38ae2e",
+  "strategy": "manual-commit",
+  "created_at": "2026-04-04T00:55:38.295368Z",
+  "branch": "main",
+  "checkpoints_count": 2,
+  "files_touched": [
+    "e2e/dark-mode.spec.js",
+    "e2e/helpers.js",
+    "e2e/import-export.spec.js",
+    "e2e/markdown-import-export.spec.js",
+    "e2e/mobile-crud.spec.js",
+    "e2e/mobile-navigation.spec.js",
+    "e2e/navigation.spec.js",
+    "e2e/pages/SidebarPage.js",
+    "e2e/pages/TablePage.js",
+    "e2e/table-crud.spec.js",
+    "src/App.test.jsx",
+    "src/components/Layout.jsx",
+    "src/components/Sidebar.jsx",
+    "src/components/shared/BottomSheet.jsx",
+    "src/components/shared/DataTable.jsx",
+    "src/components/shared/FieldInput.test.jsx",
+    "src/utils/excelIO.test.js",
+    "src/utils/format.test.js",
+    "src/utils/markdownIO.test.js"
+  ],
+  "agent": "Claude Code",
+  "model": "claude-sonnet-4-6",
+  "turn_id": "a87a97f7bafc",
+  "token_usage": {
+    "input_tokens": 561,
+    "cache_creation_tokens": 3039913,
+    "cache_read_tokens": 41631502,
+    "output_tokens": 332982,
+    "api_call_count": 488
+  },
+  "session_metrics": {
+    "turn_count": 35
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-04-04T00:55:37.344122Z",
+    "agent_lines": 0,
+    "human_added": 262,
+    "human_modified": 264,
+    "human_removed": 0,
+    "total_committed": 426,
+    "agent_percentage": 0
+  }
+}
