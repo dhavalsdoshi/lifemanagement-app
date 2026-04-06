@@ -179,3 +179,7 @@ read @TASKS.md and pick first line
 ---
 
 agree on layer 1,2 and 3. lets not do layer4 tests. lets save plan in a markdown file.
+
+---
+
+start implementing this plan
