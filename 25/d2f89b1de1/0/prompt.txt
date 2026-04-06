@@ -1,0 +1,181 @@
+push
+
+---
+
+add to readme about playwright tests and how to run them
+add to CLAUDE.md what all should be run before any commit
+
+---
+
+push
+
+---
+
+- create the ability to switch between light and dark mode. 
+- add a widget for rating with stars where the user visually picks the star rating instead of a dropdown with number.
+
+---
+
+can you create a plan for how we would implement markdown export and import to easily integrate with obsidian or similar apps
+
+---
+
+save this in a markdown file for later
+
+---
+
+the left side bar is remaining dark even when i switch to light mode
+
+---
+
+create a plan to make the ui mobile screen friendly
+
+---
+
+before you save the doc and implement it
+why is movile playwright project talking about iphone13 and pixel5. shouldnt it be more new versions?
+
+---
+
+yes
+
+---
+
+the ui for the mobile viewport is wierd for adding data as the inplace editing in the table leaves very little place to write and see. So can you rethink how the ui should be for mobile to see and enter data. Share a plan for it with me.
+
+---
+
+can you visualise this for me before we implement it?
+
+---
+
+this looks great implement it
+
+---
+
+push
+
+---
+
+read @docs/markdown-io-plan.md
+
+---
+
+in this plan can you make sure import gives an option to append data or complete overwrite as option
+
+---
+
+update the plan for the import and export UI so that it integrates well excel and markdown both working well and easy
+
+---
+
+commit changes to the plan
+
+---
+
+implement the markdown export and import based on @docs/markdown-io-plan.md
+
+---
+
+yes
+
+---
+
+fix all the npm audit vulnerabilities
+
+---
+
+<task-notification>
+<task-id>bi7mqsh5s</task-id>
+<tool-use-id>toolu_01BBwtsg5nKtBvYnnmtvfVJc</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/bi7mqsh5s.output</output-file>
+<status>completed</status>
+<summary>Background command "npx playwright test --reporter=line 2>&1 | tail -6" completed (exit code 0)</summary>
+</task-notification>
+Read the output file to retrieve the result: /private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/bi7mqsh5s.output
+
+---
+
+<task-notification>
+<task-id>bgu8fg5u2</task-id>
+<tool-use-id>toolu_01YYLDfKNYAUyGGteGAE6pas</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/bgu8fg5u2.output</output-file>
+<status>completed</status>
+<summary>Background command "npx playwright test --reporter=line 2>&1 | tail -6" completed (exit code 0)</summary>
+</task-notification>
+Read the output file to retrieve the result: /private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/bgu8fg5u2.output
+
+---
+
+<task-notification>
+<task-id>b6xzvevzf</task-id>
+<tool-use-id>REDACTED</tool-use-id>
+<output-file>/private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/b6xzvevzf.output</output-file>
+<status>completed</status>
+<summary>Background command "npx playwright test --reporter=line 2>&1 | grep -E "passed|failed|error" | tail -5" completed (exit code 0)</summary>
+</task-notification>
+Read the output file to retrieve the result: /private/tmp/claude-501/-Users-dhavaldoshi-projects-ai-trials-lifemanagement-app/4262485f-4413-4e56-9258-73c8ab38ae2e/tasks/b6xzvevzf.output
+
+---
+
+push
+
+---
+
+create a plan to convert this into a macos app
+
+---
+
+can we keep both options available?
+
+---
+
+yes
+
+---
+
+why is that change needed
+
+---
+
+yes
+
+---
+
+can the code be made more maintainable and easy to add features going forward? create a plan for this.
+
+---
+
+yes go ahead with them
+
+---
+
+continue
+
+---
+
+Review test coverage at unit and end to end test level and come up with a plan to improve it. Also look for areas of improvements to make tests more maintainability.
+
+---
+
+continue implementing the above plan
+
+---
+
+continue
+
+---
+
+push the changes
+
+---
+
+mark tasks as done
+
+---
+
+read @TASKS.md and pick first line
+
+---
+
+agree on layer 1,2 and 3. lets not do layer4 tests. lets save plan in a markdown file.
